@@ -18,10 +18,12 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone')->nullable();
-            $table->integer('role')->unsigned()->default(1);// 1 - admin , 2 - staff
+            $table->integer('role')->unsigned()->default(1);// 1 - admin , 2 - staff, 3 - user
             $table->bigInteger('branch')->nullable()->default(0);
             $table->bigInteger('created_by')->default(0);
             $table->string('avatar')->nullable();
+            $table->boolean('active')->default(true);
+            $table->string('fcm')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

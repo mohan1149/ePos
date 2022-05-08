@@ -21,9 +21,12 @@ class APIController extends Controller
         try{
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+                $user->fcm = $request['fcm'];
+                $user->save();
                 $reponse = [
                     'status' => true,
-                    'data' => Auth::user(),
+                    'data' => $user,
                 ];
             }else{
                 $reponse = [
@@ -392,7 +395,7 @@ class APIController extends Controller
     public function categoriesByBranch(Request $request){
         try {
             $id = $request['id'];
-            $categories = Category::where('id',$id)->get();
+            $categories = Category::where('branch',$id)->get();
             $response = [
                 'status' => true,
                 'categories'=>$categories
@@ -562,6 +565,7 @@ class APIController extends Controller
             return response()->json($error, 200);
         }
     }
+    
     public function allOrders(Request $request){
         try {
             $uid = $request['uid'];
