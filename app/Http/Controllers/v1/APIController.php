@@ -609,4 +609,67 @@ class APIController extends Controller
             return response()->json($error, 200);
         }
     }
+
+    public function deleteOrder(Request $request){
+        try {
+            $id = $request['id'];
+            $order = Order::find($id);
+            $order->delete();
+            $response = [
+                'status' => true,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function reports(Request $request){
+        try {
+            $uid = $request['id'];
+            $branches = Branch::where('created_by',$uid)->count();
+            $staff = User::where('created_by',$uid)->count();
+            $products = Product::where('created_by',$uid)->count();
+            $orders = Order::where('created_for',$uid)->count();
+            $out_of_stock_products = Product::where('created_by',$uid)->where('stock_item',1)
+                ->where('stock',0)
+                ->count();
+            $products_by_branch = Branch::where('branches.created_by',$uid)
+                ->leftJoin('products','products.branch','=','branches.id')
+                ->selectRaw('branches.id,branches.branch,count(products.id) as tp')
+                ->groupBy('branches.id')
+                ->groupBy('branches.branch')
+                ->get();
+            $sales_by_branch = Branch::where('branches.created_by',$uid)
+                ->leftJoin('orders','orders.branch','=','branches.id')
+                ->selectRaw('branches.id,branches.branch,count(orders.id) as ts,sum(orders.final_total) as tv ')
+                ->groupBy('branches.id')
+                ->groupBy('branches.branch')
+                ->get();
+            $data = [
+                'branches'=>$branches,
+                'staff'=>$staff,
+                'products'=>$products,
+                'out_of_stock_products'=>$out_of_stock_products,
+                'orders'=>$orders,
+                'products_by_branch'=>$products_by_branch,
+                'sales_by_branch'=>$sales_by_branch,
+            ];
+            $response = [
+                'status' => true,
+                'data'=>$data,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
 }

@@ -50,3 +50,6 @@ Route::post('/all/products-by-branch','App\Http\Controllers\v1\APIController@pro
 Route::post('/create/order','App\Http\Controllers\v1\APIController@createOrder');
 Route::post('/all/orders','App\Http\Controllers\v1\APIController@allOrders');
 Route::post('/orders-by-staff','App\Http\Controllers\v1\APIController@ordersByStaff');
+Route::post('/delete-order','App\Http\Controllers\v1\APIController@deleteOrder');
+
+Route::post('/reports','App\Http\Controllers\v1\APIController@reports');
