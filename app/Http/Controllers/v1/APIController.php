@@ -22,12 +22,19 @@ class APIController extends Controller
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
-                $user->fcm = $request['fcm'];
-                $user->save();
-                $reponse = [
-                    'status' => true,
-                    'data' => $user,
-                ];
+                if($user->active){
+                    $user->fcm = $request['fcm'];
+                    $user->save();
+                    $reponse = [
+                        'status' => true,
+                        'data' => $user,
+                    ];
+                }else{
+                    $reponse = [
+                        'status' => false,
+                        'error' => 'user_deactivated',
+                    ];
+                }
             }else{
                 $reponse = [
                     'status' => false,
@@ -635,6 +642,7 @@ class APIController extends Controller
             $staff = User::where('created_by',$uid)->count();
             $products = Product::where('created_by',$uid)->count();
             $orders = Order::where('created_for',$uid)->count();
+            $orders_sum = Order::where('created_for',$uid)->sum('final_total');
             $out_of_stock_products = Product::where('created_by',$uid)->where('stock_item',1)
                 ->where('stock',0)
                 ->count();
@@ -658,6 +666,7 @@ class APIController extends Controller
                 'orders'=>$orders,
                 'products_by_branch'=>$products_by_branch,
                 'sales_by_branch'=>$sales_by_branch,
+                'orders_sum'=>$orders_sum,
             ];
             $response = [
                 'status' => true,
