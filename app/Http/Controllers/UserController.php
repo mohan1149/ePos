@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Models\Setting;
 
 
 class UserController extends Controller
@@ -62,6 +63,13 @@ class UserController extends Controller
                 $user->avatar = $url;
                 $user->password = Hash::make($request['password']);
                 $user->save();
+                $setting = new Setting();
+                $setting->created_by = $user->id;
+                $setting->decimal_points = 3;
+                $setting->enable_bookings = 0;
+                $setting->enable_home_service = 0;
+                $setting->enable_device_linking = 0;
+                $setting->save();
                 return redirect('/users');
             } catch (\Exception $e) {
                 return abort(500);

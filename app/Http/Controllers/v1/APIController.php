@@ -10,24 +10,65 @@ use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\Setting;
 use DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\v1\ProductController;
+use App\Http\Controllers\v1\ServiceController;
+use App\Http\Controllers\v1\CategoryController;
+use App\Http\Controllers\v1\BranchController;
+use App\Http\Controllers\v1\UserController;
+use App\Http\Controllers\v1\OrderController;
+use App\Http\Controllers\v1\SliderController;
+use App\Http\Controllers\v1\BookingController;
 
 class APIController extends Controller
 {
     //
+    private $productController;
+    private $serviceController;
+    private $categoryController;
+    private $branchController;
+    private $userController;
+    private $orderController;
+    private $sliderController;
+    private $bookingController;
 
+    public function __construct(){
+        $this->productController = new ProductController();
+        $this->serviceController = new ServiceController();
+        $this->categoryController = new CategoryController();
+        $this->branchController = new BranchController();
+        $this->userController = new UserController();
+        $this->orderController = new OrderController();
+        $this->sliderController = new SliderController();
+        $this->bookingController = new BookingController();
+    }
+
+    /**
+     * APIs Releated to Users
+     * START
+     */
     public function login(Request $request){
         try{
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
+                $setting = [];
                 if($user->active){
+                    if($user->role == 1){
+                        $setting = Setting::where('created_by',$user->id)->first();
+                    }
+                    if($user->role == 0){
+                        $setting = Setting::where('created_by',$user->created_by)->first();
+                    }
                     $user->fcm = $request['fcm'];
                     $user->save();
                     $reponse = [
                         'status' => true,
                         'data' => $user,
+                        'setting'=>$setting,
                     ];
                 }else{
                     $reponse = [
@@ -51,17 +92,25 @@ class APIController extends Controller
         }
     }
 
+    public function updateSettings(Request $request){
+        try {
+            $status =  $this->userController->editSettings($request);
+            $reponse = [
+                'status' => $status,
+            ];
+            return response()->json($reponse, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
     public function updateAvatar(Request $request){
         try {
-            $uid = $request['uid'];
-            $user = User::find($uid);
-            $avatar = $request->file('avatar');
-            $image_name  = uniqid().'.'.$avatar->getClientOriginalExtension();
-            $destination = 'storage/avatars';
-            $avatar->move($destination, $image_name );
-            $url = $request->getSchemeAndHttpHost().'/storage/avatars/'.$image_name;
-            $user->avatar = $url;
-            $user->save();
+            $url =  $this->userController->editAvatar($request);
             $response = [
                 'status' => true,
                 'data' => $url,
@@ -78,13 +127,9 @@ class APIController extends Controller
 
     public function resetPassword(Request $request){
         try {
-            $uid = $request['uid'];
-            $password = $request['password'];
-            $user = User::find($uid);
-            $user->password = Hash::make($password);
-            $user->save();
+            $status =  $this->userController->updatePassword($request);
             $reponse = [
-                'status' => true,
+                'status' => $status,
             ];
             return response()->json($reponse, 200);
         } catch (\Exception $e) {
@@ -96,107 +141,6 @@ class APIController extends Controller
         }
     }
 
-    //Branches
-    public function addBranch(Request $request){
-        try {
-            $uid = $request['uid'];
-            $name = $request['branch'];
-            $address = $request['address'];
-            $branch = new Branch();
-            $branch->created_by = $uid;
-            $branch->branch = $name;
-            $branch->address = $address;
-            $branch->save();
-            $response = [
-                'status' => true,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function editBranch(Request $request){
-        try {
-            $id = $request['id'];
-            $name = $request['branch'];
-            $address = $request['address'];
-            $branch = Branch::find($id);
-            $branch->branch = $name;
-            $branch->address = $address;
-            $branch->save();
-            $response = [
-                'status' => true,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function deleteBranch(Request $request){
-        try {
-            $id = $request['id'];
-            $branch = Branch::find($id);
-            $branch->delete();
-            $response = [
-                'status' => true,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function allBranches(Request $request){
-        try {
-            $uid = $request['uid'];
-            $branches = Branch::where('created_by',$uid)->get();
-            $response = [
-                'status' => true,
-                'branches'=>$branches
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function branchByID(Request $request){
-        try {
-            $id = $request['id'];
-            $branch = Branch::find($id);
-            $response = [
-                'status' => true,
-                'branch'=>$branch
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    //Staff
     public function checkEmailExistence(Request $request){
         try {
             $email = $request['email'];
@@ -223,24 +167,9 @@ class APIController extends Controller
 
     public function addStaff(Request $request){
         try {
-            $uid = $request['uid'];
-            $user = new User();
-            $avatar = $request->file('avatar');
-            $image_name  = uniqid().'.'.$avatar->getClientOriginalExtension();
-            $destination = 'storage/avatars';
-            $avatar->move($destination, $image_name );
-            $url = $request->getSchemeAndHttpHost().'/storage/avatars/'.$image_name;
-            $user->name = $request['name'];
-            $user->email = $request['email'];
-            $user->phone = $request['phone'];
-            $user->role = 0;
-            $user->branch = $request['branch'];
-            $user->created_by = $uid;
-            $user->avatar = $url;
-            $user->password = Hash::make($request['password']);
-            $user->save();
+            $status = $this->userController->create($request);
             $response = [
-                'status' => true,
+                'status' => $status,
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -254,22 +183,9 @@ class APIController extends Controller
 
     public function editStaff(Request $request){
         try {
-            $id = $request['id'];
-            $user = User::find($id);
-            $avatar = $request->file('avatar');
-            if($avatar !== "" && isset($avatar)){
-                $image_name  = uniqid().'.'.$avatar->getClientOriginalExtension();
-                $destination = 'storage/avatars';
-                $avatar->move($destination, $image_name );
-                $url = $request->getSchemeAndHttpHost().'/storage/avatars/'.$image_name;
-                $user->avatar = $url;
-            }
-            $user->name = $request['name'];
-            $user->phone = $request['phone'];
-            $user->branch = $request['branch'];
-            $user->save();
+            $status = $this->userController->edit($request);
             $response = [
-                'status' => true,
+                'status' => $status,
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -284,10 +200,9 @@ class APIController extends Controller
     public function deleteStaff(Request $request){
         try {
             $id = $request['id'];
-            $user = User::find($id);
-            $user->delete();
+            $status = $this->userController->destroy($id);
             $response = [
-                'status' => true,
+                'status' => $status,
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -316,20 +231,130 @@ class APIController extends Controller
             return response()->json($error, 200);
         }
     }
-    
-    //Categories
-    public function addCategory(Request $request){
+
+    /**
+     * END
+     */
+
+    /**
+     * APIs Releated to Branches
+     * START
+     */
+    public function addBranch(Request $request){
+        try {
+            $status = $this->branchController->create($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function branchesByUser(Request $request){
         try {
             $uid = $request['uid'];
-            $name = $request['category'];
-            $branch = $request['branch'];
-            $category = new Category();
-            $category->created_by = $uid;
-            $category->category = $name;
-            $category->branch = $branch;
-            $category->save();
+            $branches = $this->branchController->index($uid);
             $response = [
                 'status' => true,
+                'branches'=>$branches
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function editBranch(Request $request){
+        try {
+            $status = $this->branchController->update($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function deleteBranch(Request $request){
+        try {
+            $id = $request['id'];
+            $status = $this->branchController->destroy($id);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function branchByID(Request $request){
+        try {
+            $id = $request['id'];
+            $branch = $this->branchController->show($id);
+            $response = [
+                'status' => true,
+                'branch'=>$branch
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    /**
+     * END
+     */
+    
+    /**
+     * APIs Releated to Categories
+     */
+    public function addCategory(Request $request){
+        try {
+            $status = $this->categoryController->create($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function allCategories(Request $request){
+        try {
+            $uid = $request['uid'];
+            $categories = $this->categoryController->index($uid);
+            $response = [
+                'status' => true,
+                'categories'=>$categories
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -343,15 +368,9 @@ class APIController extends Controller
 
     public function editCategory(Request $request){
         try {
-            $id = $request['id'];
-            $name = $request['category'];
-            $branch = $request['branch'];
-            $category = Category::find($id);
-            $category->category = $name;
-            $category->branch = $branch;
-            $category->save();
+            $status = $this->categoryController->edit($request);
             $response = [
-                'status' => true,
+                'status' => $status,
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -366,10 +385,9 @@ class APIController extends Controller
     public function deleteCategory(Request $request){
         try {
             $id = $request['id'];
-            $category = Category::find($id);
-            $category->delete();
+            $status = $this->categoryController->destroy($id);
             $response = [
-                'status' => true,
+                'status' => $status,
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -380,115 +398,18 @@ class APIController extends Controller
             return response()->json($error, 200);
         }
     }
+    /**
+     * END
+     */
     
-    public function allCategories(Request $request){
-        try {
-            $uid = $request['uid'];
-            $categories = Category::where('created_by',$uid)->get();
-            $response = [
-                'status' => true,
-                'categories'=>$categories
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function categoriesByBranch(Request $request){
-        try {
-            $id = $request['id'];
-            $categories = Category::where('branch',$id)->get();
-            $response = [
-                'status' => true,
-                'categories'=>$categories
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    //Products
+    /**
+     * APIs Releated to Product
+     */
     public function addProduct(Request $request){
         try {
-            $uid = $request['uid'];
-            $product = new Product();
-            $image = $request->file('product_image');
-            $image_name  = uniqid().'.'.$image->getClientOriginalExtension();
-            $destination = 'storage/products';
-            $image->move($destination, $image_name );
-            $url = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
-            $product->created_by = $uid;
-            $product->product_image = $url;
-            $product->name = $request['name'];
-            $product->sku = $request['sku'];
-            $product->price = $request['price'];
-            $product->stock_item = $request['stock_item'];
-            $product->stock = $request['stock'];
-            $product->branch = $request['branch'];
-            $product->category = $request['category'];
-            $product->save();
+            $status = $this->productController->create($request);
             $response = [
-                'status' => true,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function editProduct(Request $request){
-        try {
-            $id = $request['id'];
-            $image = $request->file('product_image');
-            $product = Product::find($id);
-            if($image != "" && isset($image)){
-                $image_name  = uniqid().'.'.$image->getClientOriginalExtension();
-                $destination = 'storage/products';
-                $image->move($destination, $image_name );
-                $url = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
-                $product->product_image = $url;
-            }
-            $product->name = $request['name'];
-            $product->price = $request['price'];
-            $product->stock_item = $request['stock_item'];
-            $product->stock = $request['stock'];
-            $product->branch = $request['branch'];
-            $product->category = $request['category'];
-            $product->save();
-            $response = [
-                'status' => true,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function deleteProduct(Request $request){
-        try {
-            $id = $request['id'];
-            $product = Product::find($id);
-            $product->delete();
-            $response = [
-                'status' => true,
+                'status' => $status,
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -503,7 +424,7 @@ class APIController extends Controller
     public function allProducts(Request $request){
         try {
             $uid = $request['uid'];
-            $products = Product::where('created_by',$uid)->get();
+            $products = $this->productController->index($uid);
             $response = [
                 'status' => true,
                 'products'=>$products,
@@ -518,10 +439,61 @@ class APIController extends Controller
         }
     }
 
+    public function editProduct(Request $request){
+        try {
+            $status = $this->productController->update($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function deleteProduct(Request $request){
+        try {
+            $id = $request['id'];
+            $status = $this->productController->destroy($id);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function getProductCategories(Request $request){
+        try {
+            $bid = $request['id'];
+            $categories = $this->categoryController->getProductCategoriesByBranchId($bid);
+            $response = [
+                'status'=>true,
+                'categories'=>$categories,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
     public function productsByBranch(Request $request){
         try {
             $id = $request['id'];
-            $products = Product::where('branch',$id)->get();
+            $products = $this->productController->productsByBranchId($id);
             $response = [
                 'status' => true,
                 'products'=>$products,
@@ -535,6 +507,163 @@ class APIController extends Controller
             return response()->json($error, 200);
         }
     }
+
+    /**
+     * END
+     */
+
+    /**
+     * APIs Releated to Services
+     * START
+     */
+    public function getServiceCategories(Request $request){
+        try {
+            $bid = $request['bid'];
+            $categories = $this->categoryController->getServiceCategoriesByBranchId($bid);
+            $response = [
+                'status'=>true,
+                'categories'=>$categories,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function createService(Request $request){
+        try {
+            $status = $this->serviceController->createService($request);
+            if($status){
+                $response= [
+                    'status'=>true,
+                ];
+            }else{
+                $response= [
+                    'status'=>false,
+                ];
+            }
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function getServices(Request $request){
+        try {
+            $id = $request['uid'];
+            $services = $this->serviceController->index($id);
+            $response = [
+                'status'=>true,
+                'services'=>$services,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function updateService(Request $request){
+        try {
+            $status = $this->serviceController->update($request);
+            $response = [
+                'status'=>$status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function deleteService(Request $request){
+        try {
+            $id = $request['id'];
+            $status = $this->serviceController->destroy($id);
+            $response = [
+                'status'=>$status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function getServicesByCategory(Request $request){
+        try {
+            $cid = $request['id'];
+            $services = $this->serviceController->getServicesByCategoryId($cid);
+            $response = [
+                'status'=>true,
+                'services'=>$services,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+    /**
+    * END
+    */
+
+
+    public function createBooking(Request $request){
+        try {
+            $data = $this->bookingController->create($request['bid']);
+            $response = [
+                'status' => true,
+                'staff'=> $data['staff'],
+                'categories'=>$data['categories'],
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function storeBooking(Request $request){
+        try {
+            $status = $this->bookingController->store($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+    
+    
 
     //Orders
     public function createOrder(Request $request){
@@ -559,9 +688,12 @@ class APIController extends Controller
                     ]);
                 }
             }
+            $setting = Setting::where('created_by',$request['created_for'])->select(['enable_device_linking'])->first();
+            if($setting->enable_device_linking == 1){
+                $this->sendOrderPushNotifciation($order->id,$request['lang'],$request['staff']);
+            }
             $response = [
                 'status' => true,
-
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -573,6 +705,25 @@ class APIController extends Controller
         }
     }
     
+    public function sendOrderPushNotifciation($id,$lang,$staff){
+        $fcm = DB::table('linked_devices')->where('user_id',$staff)->first();
+        Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'key=AAAA98fPwvk:APA91bGtjTfJZzacP2KB85xfgyzS5qS_L1Y9GO5qXLf9j3H0RQ6mYpB2aOotQSH_FBTKj5kxG-jvhrgGzO_llgJPDBMg3L4A8t86d9rqFpfKMxJpVw0HUuyZDIvcbSk2oTw7XbyXzY1a'
+        ])->post('https://fcm.googleapis.com/fcm/send', [
+            'to' => $fcm->remote_device_token,
+            "notification" => [
+                "title" => "Received Order",
+                "body" => "A new order has been reciced from remote device.",
+            ],
+            "data"=>[
+                "type"=>"print_order",
+                "id"=>$id,
+                "lang"=>$lang
+            ]
+        ]);
+    }
+
     public function allOrders(Request $request){
         try {
             $uid = $request['uid'];
@@ -671,6 +822,111 @@ class APIController extends Controller
             $response = [
                 'status' => true,
                 'data'=>$data,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+    
+
+    public function linkDevice(Request $request){
+        try {
+            $uid = $request['user_id'];
+            $remote_device_token = $request['remote_device_token'];
+            DB::table('linked_devices')
+                ->updateOrInsert(
+                    ['user_id' => $uid],
+                    ['remote_device_token' => $remote_device_token]
+            );
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'key=AAAA98fPwvk:APA91bGtjTfJZzacP2KB85xfgyzS5qS_L1Y9GO5qXLf9j3H0RQ6mYpB2aOotQSH_FBTKj5kxG-jvhrgGzO_llgJPDBMg3L4A8t86d9rqFpfKMxJpVw0HUuyZDIvcbSk2oTw7XbyXzY1a'
+            ])->post('https://fcm.googleapis.com/fcm/send', [
+                'to' => $remote_device_token,
+                "notification" => [
+                    "title" => "Remote Device Linking",
+                    "body" => "Your device is connected with other remote device successfully.",
+                ],
+                "data"=>[
+                    "type"=>"device_linking"
+                ]
+            ]);
+            $response = [
+                'status' => true,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function getOrderForPushNotification(Request $request){
+        try {
+            $id = $request['id'];
+            $order = $this->orderController->orderForPushNotification($id);
+            $response = [
+                'status' => true,
+                'response' => $order
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function createSlider(Request $request){
+        try {
+            $status = $this->sliderController->create($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function getSliders(Request $request){
+        try {
+            $id = $request['uid'];
+            $status = $this->sliderController->index($id);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function getBranchSliders(Request $request){
+        try {
+            $id = $request['bid'];
+            $sliders = $this->sliderController->branchSliders($id);
+            $response = [
+                'status' => true,
+                'sliders'=>$sliders,
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
