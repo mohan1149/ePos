@@ -707,21 +707,24 @@ class APIController extends Controller
     
     public function sendOrderPushNotifciation($id,$lang,$staff){
         $fcm = DB::table('linked_devices')->where('user_id',$staff)->first();
-        Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'key=AAAA98fPwvk:APA91bGtjTfJZzacP2KB85xfgyzS5qS_L1Y9GO5qXLf9j3H0RQ6mYpB2aOotQSH_FBTKj5kxG-jvhrgGzO_llgJPDBMg3L4A8t86d9rqFpfKMxJpVw0HUuyZDIvcbSk2oTw7XbyXzY1a'
-        ])->post('https://fcm.googleapis.com/fcm/send', [
-            'to' => $fcm->remote_device_token,
-            "notification" => [
-                "title" => "Received Order",
-                "body" => "A new order has been reciced from remote device.",
-            ],
-            "data"=>[
-                "type"=>"print_order",
-                "id"=>$id,
-                "lang"=>$lang
-            ]
-        ]);
+        if($fcm !="" && isset($fcm)){
+            Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'key=AAAA98fPwvk:APA91bGtjTfJZzacP2KB85xfgyzS5qS_L1Y9GO5qXLf9j3H0RQ6mYpB2aOotQSH_FBTKj5kxG-jvhrgGzO_llgJPDBMg3L4A8t86d9rqFpfKMxJpVw0HUuyZDIvcbSk2oTw7XbyXzY1a'
+            ])->post('https://fcm.googleapis.com/fcm/send', [
+                'to' => $fcm->remote_device_token,
+                "notification" => [
+                    "title" => "Received Order",
+                    "body" => "A new order has been reciced from remote device.",
+                ],
+                "data"=>[
+                    "type"=>"print_order",
+                    "id"=>$id,
+                    "lang"=>$lang
+                ]
+            ]);
+        }
+        
     }
 
     public function allOrders(Request $request){
