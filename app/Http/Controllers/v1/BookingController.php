@@ -42,9 +42,14 @@ class BookingController extends Controller
         }
     }
 
-    public function bookingsByStaffId($id,$date){
+    public function bookingsByStaff($id,$date){
         try {
-            return Booking::where('booked_by',$id)->whereDate('booking_datetime',$date)->get();
+            return Booking::whereDate('created_at',$date)
+            ->where(function($q) use ($id){
+                $q->where('staff', $id)
+                ->orWhere('booked_by', $id);
+            })
+            ->get();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -52,42 +57,28 @@ class BookingController extends Controller
 
     public function allBookings($id,$date){
         try {
-            return Booking::where('created_by',$id)->whereDate('booking_datetime',$date)->get();
+            return Booking::where('created_by',$id)->whereDate('created_at',$date)->get();
         } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
-    public function editBooking($request){
-        try {
-            $booking = new Booking();
-            return true;
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    public function update($request){
-        try {
-            $booking = new Booking();
-            return true;
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
-    public function updateStatus($request){
-        try {
-            $booking = new Booking();
-            return true;
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
+    
 
     public function destroy($id){
         try {
             $booking = Booking::find($id);
             $booking->delete();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function updateStatus($id,$status){
+        try {
+            $booking = Booking::find($id);
+            $booking->status = $status;
+            $booking->save();
             return true;
         } catch (\Exception $e) {
             return false;

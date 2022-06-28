@@ -24,6 +24,9 @@ class CreateProductsTable extends Migration
             $table->bigInteger('stock')->default(0);
             $table->bigInteger('branch');
             $table->bigInteger('category');
+            $table->boolean('show_on_website')->nullable()->default(true);
+            $table->boolean('featured')->nullable()->default(false);
+            $table->bigInteger('sale_count')->default(0);
             $table->timestamps();
         });
     }

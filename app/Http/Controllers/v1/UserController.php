@@ -69,7 +69,7 @@ class UserController extends Controller
 
     public function index(Request $request){
         try {
-            $staff = User::where('created_by',$uid)->get();
+            $staff = User::where('created_by',$uid)->where('active',1)->get();
             $response = [
                 'status' => true,
                 'staff'=>$staff
@@ -83,6 +83,7 @@ class UserController extends Controller
             return response()->json($error, 200);
         }
     }
+
     public function editSettings($request){
         try {
             $uid = $request['uid'];
@@ -91,12 +92,15 @@ class UserController extends Controller
             $home_service  = $request['enable_home_service'];
             $enable_device_linking = $request['enable_device_linking'];
             $enable_home_delivery = $request['enable_home_delivery'];
+            $show_outof_stock = $request['show_outof_stock'];
             Setting::where('created_by',$uid)->update([
                 'decimal_points'=>$decimal,
                 'enable_bookings'=>$bookings,
                 'enable_home_service'=>$home_service,
                 'enable_device_linking'=>$enable_device_linking,
                 'enable_home_delivery'=>$enable_home_delivery,
+                'show_out_of_stock_products'=>$show_outof_stock,
+
             ]
             );
             return true;
@@ -144,4 +148,19 @@ class UserController extends Controller
         }
     }
     
+    public function show($id){
+        try {
+            return User::where('id',$id)->where('active',1)->first();
+        } catch (\Exception $e) {
+          return false;
+        }
+    }
+
+    public function branchStaff($id){
+        try {
+            return User::where('branch',$id)->where('active',1)->get();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 }

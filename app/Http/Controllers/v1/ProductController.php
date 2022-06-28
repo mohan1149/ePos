@@ -57,6 +57,8 @@ class ProductController extends Controller
             $product->name = $request['name'];
             $product->price = $request['price'];
             $product->stock_item = $request['stock_item'];
+            $product->featured = $request['featured'];
+            $product->show_on_website = $request['showonWebsite'];
             $product->stock = $request['stock'];
             $product->branch = $request['branch'];
             $product->category = $request['category'];
@@ -87,7 +89,7 @@ class ProductController extends Controller
     
     public function productsByBranchId($id){
         try {
-            return Product::where('branch',$id)->get();
+            return Product::where('branch',$id)->orderBy('id','DESC')->get();
         } catch (\Exception $e) {
             return [];
         }
@@ -100,4 +102,39 @@ class ProductController extends Controller
             return [];
         }
     }
+
+    public function productsByCategoryById($cid,$bid){
+        try {
+            return Product::where('branch',$bid)
+                ->orderBy('id','DESC')
+                ->where('category',$cid)
+                ->get();
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function featuredProducts($bid){
+        try {
+            return Product::where('branch',$bid)
+                ->orderBy('id','DESC')
+                ->where('featured',1)
+                ->get();
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function topSellingProducts($bid){
+        try {
+            return Product::where('branch',$bid)
+                ->orderBy('sale_count','DESC')
+                ->get();
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+
+
 }

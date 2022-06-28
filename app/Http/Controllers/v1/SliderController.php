@@ -14,9 +14,14 @@ class SliderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         //
+        try {
+            return Slider::where('created_by',$id)->get();
+        } catch (\Exception $e) {
+           return $e->getMessage();
+        }
     }
 
 
@@ -57,59 +62,38 @@ class SliderController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function edit($request)
     {
-        //
+        try {
+            $slider = Slider::find($request['id']);
+            $image = $request->file('slider_image');
+            if($image !=""){
+                $image_name  = uniqid().'.'.$image->getClientOriginalExtension();
+                $destination = 'storage/products';
+                $image->move($destination, $image_name );
+                $slider->slider_image = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
+            }
+            $slider->slider_caption = $request['caption'];
+            $slider->slider_text = $request['text'];
+            $slider->published = $request['published'];
+            $slider->branch = $request['branch'];
+            $slider->category_id = $request['category'];
+            $slider->save();
+            return true;
+        } catch (\Exception $e) {
+           return false;
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Slider  $slider
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Slider $slider)
+   
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Slider  $slider
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Slider $slider)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Slider  $slider
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Slider $slider)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Slider  $slider
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Slider $slider)
-    {
-        //
+        try {
+            $slider = Slider::find($id);
+            $slider->delete();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

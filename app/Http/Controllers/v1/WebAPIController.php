@@ -62,4 +62,106 @@ class WebAPIController extends Controller
             return response()->json($error, 200);
         }
     }
+
+    public function productsByCategory(Request $request){
+        try {
+            $products = $this->productController->productsByCategoryById($request['cid'],$request['bid']);
+            $reponse = [
+                'status' => true,
+                'products'=> $products,
+            ];
+            return response()->json($reponse, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function processOrder(Request $request){
+        try {
+            $track_id = $this->orderController->processOrderFromOutside($request);
+            $reponse = [
+                'status' => true,
+                'track_id'=>$track_id,
+            ];
+            return response()->json($reponse, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function trackOrder(Request $request){
+        try {
+            $order_status = $this->orderController->getOrderStatus($request['id']);
+            $reponse = [
+                'status' => true,
+                'order_status'=>$order_status,
+            ];
+            return response()->json($reponse, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+    
+    public function getBranchProducts(Request $request){
+        try {
+            $products = $this->productController->productsByBranchId($request['id']);
+            $reponse = [
+                'status' => true,
+                'products'=>$products,
+            ];
+            return response()->json($reponse, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+    
+    public function getFeaturedBranchProducts(Request $request){
+        try {
+            $products = $this->productController->featuredProducts($request['id']);
+            $reponse = [
+                'status' => true,
+                'products'=>$products,
+            ];
+            return response()->json($reponse, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function getTopSellingBranchProducts(Request $request){
+        try {
+            $products = $this->productController->topSellingProducts($request['id']);
+            $reponse = [
+                'status' => true,
+                'products'=>$products,
+            ];
+            return response()->json($reponse, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
 }

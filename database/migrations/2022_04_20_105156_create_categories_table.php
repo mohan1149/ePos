@@ -18,6 +18,8 @@ class CreateCategoriesTable extends Migration
             $table->bigInteger('created_by');
             $table->string('category');
             $table->bigInteger('branch');
+            $table->boolean('type')->nullable()->default(false);
+            $table->string('category_avatar')->nullable();
             $table->timestamps();
         });
     }
