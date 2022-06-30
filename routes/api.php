@@ -69,7 +69,7 @@ Route::post('/create/order','App\Http\Controllers\v1\APIController@createOrder')
 Route::post('/all/orders','App\Http\Controllers\v1\APIController@allOrders');
 Route::post('/orders-by-staff','App\Http\Controllers\v1\APIController@ordersByStaff');
 Route::post('/delete-order','App\Http\Controllers\v1\APIController@deleteOrder');
-
+Route::post('/orders/monthly','App\Http\Controllers\v1\APIController@monthlyOrders');
 Route::post('/reports','App\Http\Controllers\v1\APIController@reports');
 Route::post('/update/settings','App\Http\Controllers\v1\APIController@updateSettings');
 Route::post('/link/device','App\Http\Controllers\v1\APIController@linkDevice');
@@ -101,8 +101,9 @@ Route::post('/business-orders/create','App\Http\Controllers\v1\APIController@cre
 Route::post('/business-orders','App\Http\Controllers\v1\APIController@businessOrderByDriver');
 Route::post('/business-orders/update','App\Http\Controllers\v1\APIController@updateBusinessOrder');
 Route::post('/business-orders/delete','App\Http\Controllers\v1\APIController@deleteBusinessOrder');
-Route::post('//business-orders/all','App\Http\Controllers\v1\APIController@businessOrders');
-
+Route::post('/business-orders/all','App\Http\Controllers\v1\APIController@businessOrders');
+Route::post('/business-orders/monthly','App\Http\Controllers\v1\APIController@monthlyBusinessOrders');
+  //
 
 
 //Routes for Website

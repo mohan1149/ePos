@@ -126,7 +126,7 @@ class OrderController extends Controller
                 }
             }
             DB::commit();
-            return true;
+            return $order;
         } catch (\Exception $e) {
             DB::rollBack();
             return false;
@@ -149,6 +149,7 @@ class OrderController extends Controller
             return [];
         }
     }
+
     public function businessOrdersByUser($id,$date){
         try {
             return BusinessOrder::where('business_orders.created_by',$id)
@@ -166,7 +167,6 @@ class OrderController extends Controller
         }
     }
     
-
     public function updateBusinessOrderById($request){
         try {
             $order = BusinessOrder::find($request['id']);
@@ -189,4 +189,28 @@ class OrderController extends Controller
             return false;
         }
     }
+    public function businessOrderByMonth($request){
+        try {
+            return BusinessOrder::where('business_orders.created_by',$request['uid'])
+                ->join('business_clients as bc','bc.id','=','business_orders.client')
+                ->whereYear('business_orders.created_at',date('Y'))
+                ->whereMonth('business_orders.created_at',$request['month'])
+                ->select(['business_orders.*','bc.name','bc.address'])
+                ->get();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function ordersByMonth($request){
+        try {
+            return Order::where('created_for',$request['uid'])
+                ->whereYear('created_at',date('Y'))
+                ->whereMonth('created_at',$request['month'])
+                ->get();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+    
 }

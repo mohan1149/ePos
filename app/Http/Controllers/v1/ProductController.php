@@ -56,6 +56,7 @@ class ProductController extends Controller
             }
             $product->name = $request['name'];
             $product->price = $request['price'];
+            $product->sku = $request['sku'];
             $product->stock_item = $request['stock_item'];
             $product->featured = $request['featured'];
             $product->show_on_website = $request['showonWebsite'];

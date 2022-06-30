@@ -41,7 +41,7 @@ class WebAPIController extends Controller
         try {
             $sliders = $this->sliderController->branchSliders($request['bid']);
             $categories = $this->categoryController->getProductCategoriesByBranchId($request['bid']);
-            $latest_products = $this->productController->getLatestProductsByBranchId($request['bid'],20);
+            $latest_products = $this->productController->getLatestProductsByBranchId($request['bid'],12);
             $settings = $this->userController->settings($request['uid']);
             $meta_data = [
                 'sliders'=>$sliders,

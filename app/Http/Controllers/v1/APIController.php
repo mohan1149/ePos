@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\Setting;
+use App\Models\BusinessOrder;
 use DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -901,6 +902,24 @@ class APIController extends Controller
         }
     }
 
+    public function monthlyOrders(Request $request){
+        try {
+            $orders = $this->orderController->ordersByMonth($request);
+            $response = [
+                'status' => true,
+                'orders' =>$orders
+
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
     public function reports(Request $request){
         try {
             $uid = $request['id'];
@@ -924,6 +943,9 @@ class APIController extends Controller
                 ->groupBy('branches.id')
                 ->groupBy('branches.branch')
                 ->get();
+            $business_orders = BusinessOrder::where('created_by',$uid)
+                ->selectRaw('count(id) as count,sum(final_total) as total')
+                ->first();
             $data = [
                 'branches'=>$branches,
                 'staff'=>$staff,
@@ -933,6 +955,7 @@ class APIController extends Controller
                 'products_by_branch'=>$products_by_branch,
                 'sales_by_branch'=>$sales_by_branch,
                 'orders_sum'=>$orders_sum,
+                'business_orders'=> $business_orders,
             ];
             $response = [
                 'status' => true,
@@ -1202,9 +1225,10 @@ class APIController extends Controller
 
     public function createBusinessOrder(Request $request){
         try {
-            $status = $this->orderController->placeBusinessOrder($request);
+            $order = $this->orderController->placeBusinessOrder($request);
             $response = [
-                'status' => $status,
+                'status' => true,
+                'order'=> $order,
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -1282,7 +1306,23 @@ class APIController extends Controller
             ];
             return response()->json($error, 200);
         }
-        
+    }
+
+    public function monthlyBusinessOrders(Request $request){
+        try{
+            $orders = $this->orderController->businessOrderByMonth($request);
+            $response = [
+                'status' => true,
+                'orders'=>$orders
+            ];
+        return response()->json($response, 200);
+        } catch (\Exception $e) {
+        $error = [
+            'status'=> false,
+            'error' => $e->getMessage(),
+        ];
+        return response()->json($error, 200);
+    }
     }
     /**
      * END
