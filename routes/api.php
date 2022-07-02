@@ -103,6 +103,8 @@ Route::post('/business-orders/update','App\Http\Controllers\v1\APIController@upd
 Route::post('/business-orders/delete','App\Http\Controllers\v1\APIController@deleteBusinessOrder');
 Route::post('/business-orders/all','App\Http\Controllers\v1\APIController@businessOrders');
 Route::post('/business-orders/monthly','App\Http\Controllers\v1\APIController@monthlyBusinessOrders');
+Route::get('/business-orders/download/{id}','App\Http\Controllers\v1\APIController@businessOrderInvoice');
+
   //
 
 

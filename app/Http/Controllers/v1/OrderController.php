@@ -8,7 +8,9 @@ use App\Models\Order;
 use App\Models\Setting;
 use App\Models\OutSideOrder;
 use App\Models\BusinessOrder;
+use App\Models\BusinessClient;
 use DB;
+use PDF;
 
 class OrderController extends Controller
 {
@@ -208,6 +210,35 @@ class OrderController extends Controller
                 ->whereYear('created_at',date('Y'))
                 ->whereMonth('created_at',$request['month'])
                 ->get();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function downloadInvoice($id){
+        try {
+            $order = BusinessOrder::find($id);
+            $branch = Branch::find($order->branch);
+            $clinent = BusinessClient::find($order->client);
+            $settings = Setting::where('created_by',$order->created_by)->first();
+            //return view('orders.business.invoice',['order'=>$order,'branch'=>$branch,'client'=>$clinent,'settings'=>$settings]);
+             $content = view('orders.business.invoice',['order'=>$order,'branch'=>$branch,'client'=>$clinent,'settings'=>$settings])->render();
+                $mpdf = new \Mpdf\Mpdf([
+                    'margin_left' => 10,
+                    'margin_right' => 10,
+                    'margin_top' => 10,
+                    'margin_bottom' => 10,
+                    'margin_header' => 10,
+                    'margin_footer' => 10
+                ]);
+                $mpdf->SetProtection(array('print'));
+                $mpdf->SetTitle("iTenant - Rent Invoice");
+                $mpdf->SetWatermarkText("Sale Invoice");
+                $mpdf->showWatermarkText = true;
+                $mpdf->watermarkTextAlpha = 0.1;
+                $mpdf->SetDisplayMode('fullpage');
+                $mpdf->WriteHTML($content);
+                $mpdf->Output();
         } catch (\Exception $e) {
             return false;
         }

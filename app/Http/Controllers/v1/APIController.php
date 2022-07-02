@@ -774,7 +774,323 @@ class APIController extends Controller
      * END
      */
 
-    //Orders
+    /**
+     * APIs Releated to Sliders
+     * START
+     */
+    public function createSlider(Request $request){
+        try {
+            $status = $this->sliderController->create($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function getSliders(Request $request){
+        try {
+            $id = $request['uid'];
+            $sliders = $this->sliderController->index($id);
+            $response = [
+                'status' => true,
+                'sliders'=>$sliders,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function editSlider(Request $request){
+        try {
+            $status = $this->sliderController->edit($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function deleteSlider(Request $request){
+        try {
+            $id = $request['id'];
+            $status = $this->sliderController->destroy($id);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+    /**
+     * END
+     */
+
+    /**
+     * APIs Releated to OutSide - From Website orders
+     * STRAT
+     */
+    public function getOutsideOrders(Request $request){
+        try{
+            $orders = $this->orderController->outsideOrders($request['uid'],$request['date']);
+            $response = [
+                'status' => true,
+                'orders'=>$orders,
+            ];
+            return response()->json($response, 200);
+        }catch(\Exception $e){
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function deleteOusideOrder(Request $request){
+        try {
+            $id = $request['id'];
+            $status = $this->orderController->destroyOutsideOrder($id);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function updateOusideOrder(Request $request){
+        try {
+            $status = $this->orderController->updateOusideOrderStatus($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+    /**
+     * END
+     */
+
+    /**
+     * APIs Releated to Business Clients
+     * START
+     *  */ 
+    public function addBusinessClient(Request $request){
+        try {
+            $status = $this->businessClientController->store($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+    public function getBusinessClients(Request $request){
+        try {
+            $clients = $this->businessClientController->index($request['uid']);
+            $response = [
+                'status' => true,
+                'clients'=>$clients,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function updateBusinessClient(Request $request){
+        try {
+            $status = $this->businessClientController->update($request);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function deleteBusinessClient(Request $request){
+        try {
+            $status = $this->businessClientController->destroy($request['id']);
+            $response = [
+                'status' => $status,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function createBusinessOrder(Request $request){
+        try {
+            $order = $this->orderController->placeBusinessOrder($request);
+            $response = [
+                'status' => true,
+                'order'=> $order,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+        
+    }
+
+    public function businessOrderByDriver(Request $request){
+        try {
+            $orders = $this->orderController->businessOrdersByDriverId($request['id'],$request['date']);
+            $response = [
+                'status' => true,
+                'orders'=> $orders,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function updateBusinessOrder(Request $request){
+        try {
+            $status = $this->orderController->updateBusinessOrderById($request);
+            $response = [
+                'status' => $status,
+
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function businessOrders(Request $request){
+        try {
+            $orders = $this->orderController->businessOrdersByUser($request['uid'],$request['date']);
+            $response = [
+                'status' => true,
+                'orders'=> $orders,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function deleteBusinessOrder(Request $request) {
+        try {
+            $status = $this->orderController->destroyBusinessOrderById($request['id']);
+            $response = [
+                'status' => $status,
+
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function monthlyBusinessOrders(Request $request){
+        try{
+            $orders = $this->orderController->businessOrderByMonth($request);
+            $response = [
+                'status' => true,
+                'orders'=>$orders
+            ];
+        return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+
+    public function businessOrderInvoice(Request $request){
+        try{
+            return $this->orderController->downloadInvoice(base64_decode($request['id']));
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+    /**
+     * END
+     */
+      //Orders
     public function createOrder(Request $request){
         try {
             DB::beginTransaction();
@@ -1024,309 +1340,6 @@ class APIController extends Controller
         }
     }
 
-    /**
-     * APIs Releated to Sliders
-     * START
-     */
-    public function createSlider(Request $request){
-        try {
-            $status = $this->sliderController->create($request);
-            $response = [
-                'status' => $status,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
 
-    public function getSliders(Request $request){
-        try {
-            $id = $request['uid'];
-            $sliders = $this->sliderController->index($id);
-            $response = [
-                'status' => true,
-                'sliders'=>$sliders,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function editSlider(Request $request){
-        try {
-            $status = $this->sliderController->edit($request);
-            $response = [
-                'status' => $status,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function deleteSlider(Request $request){
-        try {
-            $id = $request['id'];
-            $status = $this->sliderController->destroy($id);
-            $response = [
-                'status' => $status,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-    /**
-     * END
-     */
-
-    /**
-     * APIs Releated to OutSide - From Website orders
-     * STRAT
-     */
-    public function getOutsideOrders(Request $request){
-        try{
-            $orders = $this->orderController->outsideOrders($request['uid'],$request['date']);
-            $response = [
-                'status' => true,
-                'orders'=>$orders,
-            ];
-            return response()->json($response, 200);
-        }catch(\Exception $e){
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function deleteOusideOrder(Request $request){
-        try {
-            $id = $request['id'];
-            $status = $this->orderController->destroyOutsideOrder($id);
-            $response = [
-                'status' => $status,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function updateOusideOrder(Request $request){
-        try {
-            $status = $this->orderController->updateOusideOrderStatus($request);
-            $response = [
-                'status' => $status,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-    /**
-     * END
-     */
-
-    /**
-     * APIs Releated to Business Clients
-     * START
-     *  */ 
-     public function addBusinessClient(Request $request){
-        try {
-            $status = $this->businessClientController->store($request);
-            $response = [
-                'status' => $status,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-    public function getBusinessClients(Request $request){
-        try {
-            $clients = $this->businessClientController->index($request['uid']);
-            $response = [
-                'status' => true,
-                'clients'=>$clients,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function updateBusinessClient(Request $request){
-        try {
-            $status = $this->businessClientController->update($request);
-            $response = [
-                'status' => $status,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function deleteBusinessClient(Request $request){
-        try {
-            $status = $this->businessClientController->destroy($request['id']);
-            $response = [
-                'status' => $status,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function createBusinessOrder(Request $request){
-        try {
-            $order = $this->orderController->placeBusinessOrder($request);
-            $response = [
-                'status' => true,
-                'order'=> $order,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-        
-    }
-
-    public function businessOrderByDriver(Request $request){
-        try {
-            $orders = $this->orderController->businessOrdersByDriverId($request['id'],$request['date']);
-            $response = [
-                'status' => true,
-                'orders'=> $orders,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-    public function updateBusinessOrder(Request $request){
-        try {
-            $status = $this->orderController->updateBusinessOrderById($request);
-            $response = [
-                'status' => $status,
-
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-
-    public function businessOrders(Request $request){
-        try {
-            $orders = $this->orderController->businessOrdersByUser($request['uid'],$request['date']);
-            $response = [
-                'status' => true,
-                'orders'=> $orders,
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-    public function deleteBusinessOrder(Request $request) {
-        try {
-            $status = $this->orderController->destroyBusinessOrderById($request['id']);
-            $response = [
-                'status' => $status,
-
-            ];
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $error = [
-                'status'=> false,
-                'error' => $e->getMessage(),
-            ];
-            return response()->json($error, 200);
-        }
-    }
-
-    public function monthlyBusinessOrders(Request $request){
-        try{
-            $orders = $this->orderController->businessOrderByMonth($request);
-            $response = [
-                'status' => true,
-                'orders'=>$orders
-            ];
-        return response()->json($response, 200);
-        } catch (\Exception $e) {
-        $error = [
-            'status'=> false,
-            'error' => $e->getMessage(),
-        ];
-        return response()->json($error, 200);
-    }
-    }
-    /**
-     * END
-     */
-    
     
 }
