@@ -174,7 +174,7 @@ class OrderController extends Controller
             $order = BusinessOrder::find($request['id']);
             $order->payment_status = $request['payStatus'];
             $order->payment_method = $request['payMethod'];
-            $order->total_paid = $request['amountPaid'];
+            $order->total_paid = $order->total_paid + $request['amountPaid'];
             $order->save();
             return true;
         } catch (\Exception $e) {
