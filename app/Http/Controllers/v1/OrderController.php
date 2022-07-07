@@ -221,7 +221,6 @@ class OrderController extends Controller
             $branch = Branch::find($order->branch);
             $clinent = BusinessClient::find($order->client);
             $settings = Setting::where('created_by',$order->created_by)->first();
-            //return view('orders.business.invoice',['order'=>$order,'branch'=>$branch,'client'=>$clinent,'settings'=>$settings]);
              $content = view('orders.business.invoice',['order'=>$order,'branch'=>$branch,'client'=>$clinent,'settings'=>$settings])->render();
                 $mpdf = new \Mpdf\Mpdf([
                     'margin_left' => 10,

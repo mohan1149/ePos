@@ -1339,7 +1339,4 @@ class APIController extends Controller
             return response()->json($error, 200);
         }
     }
-
-
-    
 }
