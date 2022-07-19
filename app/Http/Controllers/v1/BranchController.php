@@ -8,13 +8,19 @@ class BranchController extends Controller
 {
     public function create($request){
         try {
-            $uid = $request['uid'];
-            $name = $request['branch'];
-            $address = $request['address'];
             $branch = new Branch();
-            $branch->created_by = $uid;
-            $branch->branch = $name;
-            $branch->address = $address;
+            $branch->created_by = $request['uid'];
+            $branch->branch = $request['branch'];
+            $branch->address = $request['address'];
+            $branch->phone = $request['phone'];
+            $branch->email = $request['email'];
+            $branch->instagram = $request['instagram'];
+            $image = $request->file('branch_logo');
+            $image_name  = uniqid().'.'.$image->getClientOriginalExtension();
+            $destination = 'storage/products';
+            $image->move($destination, $image_name );
+            $url = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
+            $branch->logo = $url;
             $branch->save();
             return true;
         } catch (\Exception $e) {
@@ -31,11 +37,20 @@ class BranchController extends Controller
     public function update($request){
         try {
             $id = $request['id'];
-            $name = $request['branch'];
-            $address = $request['address'];
             $branch = Branch::find($id);
-            $branch->branch = $name;
-            $branch->address = $address;
+            $branch->branch = $request['branch'];
+            $branch->address = $request['address'];
+            $branch->phone = $request['phone'];
+            $branch->email = $request['email'];
+            $branch->instagram = $request['instagram'];
+            $image = $request->file('branch_logo');
+            if(isset($image)){
+                $image_name  = uniqid().'.'.$image->getClientOriginalExtension();
+                $destination = 'storage/products';
+                $image->move($destination, $image_name );
+                $url = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
+                $branch->logo = $url;
+            }
             $branch->save();
             return true;
         } catch (\Exception $e) {
