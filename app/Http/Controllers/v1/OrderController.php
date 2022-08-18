@@ -4,13 +4,16 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
+use App\Models\Category;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Setting;
 use App\Models\OutSideOrder;
 use App\Models\BusinessOrder;
 use App\Models\BusinessClient;
 use DB;
 use PDF;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -191,6 +194,7 @@ class OrderController extends Controller
             return false;
         }
     }
+
     public function businessOrderByMonth($request){
         try {
             return BusinessOrder::where('business_orders.created_by',$request['uid'])
@@ -243,4 +247,15 @@ class OrderController extends Controller
         }
     }
     
+    public function terminal(Request $request){
+        try {
+            $branch = auth()->user()->branch;
+            $categories = Category::where('branch',$branch)->where('type',0)->get();
+            $products = Product::where('branch',$branch)->get();
+            $settings = Setting::where('created_by',auth()->user()->created_by)->first();
+            return view('orders.create',['categories'=>$categories,'products'=>$products,'settings'=>$settings]);
+        } catch (\Exception $e) {
+            return abort(500,'ISE');
+        }
+    }
 }

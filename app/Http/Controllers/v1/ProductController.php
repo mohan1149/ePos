@@ -11,7 +11,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\Setting;
-
+use PDF;
 use DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -136,6 +136,30 @@ class ProductController extends Controller
         }
     }
 
-
+    public function barcodes(){
+        try {
+            $products = Product::all();
+            //return view('products.barcodes',['products'=>$products])->render();
+            $content = view('products.barcodes',['products'=>$products])->render();
+                $mpdf = new \Mpdf\Mpdf([
+                    'margin_left' => 10,
+                    'margin_right' => 10,
+                    'margin_top' => 10,
+                    'margin_bottom' => 10,
+                    'margin_header' => 10,
+                    'margin_footer' => 10
+                ]);
+                $mpdf->SetProtection(array('print'));
+                // $mpdf->SetTitle("iTenant - Rent Invoice");
+                // $mpdf->SetWatermarkText("Sale Invoice");
+                // $mpdf->showWatermarkText = true;
+                // $mpdf->watermarkTextAlpha = 0.1;
+                $mpdf->SetDisplayMode('fullpage');
+                $mpdf->WriteHTML($content);
+                $mpdf->Output();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 
 }

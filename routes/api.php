@@ -22,7 +22,6 @@ Route::post('/login','App\Http\Controllers\v1\APIController@login');
 Route::post('/update/avatar','App\Http\Controllers\v1\APIController@updateAvatar');
 Route::post('/reset/password','App\Http\Controllers\v1\APIController@resetPassword');
 
-
 /**
  * Routes Related to Branches
  * START

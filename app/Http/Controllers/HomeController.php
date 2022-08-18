@@ -21,6 +21,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        switch(auth()->user()->role){
+            case 0: return view('staff.dashboard');
+            break;
+            case 1:return view('admin.dashboard');
+                break;
+            case 2:return view('su.dashboard');
+                break;
+            case 3:return view('driver.dashboard');
+                break;
+            default:return view('dashboard');
+        }
+        
     }
 }
