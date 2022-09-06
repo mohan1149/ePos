@@ -134,7 +134,7 @@ class OrderController extends Controller
             return $order;
         } catch (\Exception $e) {
             DB::rollBack();
-            return false;
+            return $e->getMessage;
         }
     }
 
@@ -207,6 +207,22 @@ class OrderController extends Controller
             return false;
         }
     }
+    public function businessOrderByMonthAndClient($request){
+        try {
+            DB::statement("SET SQL_MODE=''");
+            return DB::table('business_clients')
+                ->join('business_orders as bo','bo.client','=','business_clients.id')
+                ->where('bo.created_by',$request['uid'])
+                ->whereYear('bo.created_at',date('Y'))
+                ->whereMonth('bo.created_at',$request['month'])
+                ->selectRaw("business_clients.*,count(bo.id) as total_sales,sum(final_total) as grand_total, sum(total_paid) total_paid")
+                ->groupBy('business_clients.id')
+                ->get();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    
 
     public function ordersByMonth($request){
         try {
@@ -216,6 +232,49 @@ class OrderController extends Controller
                 ->get();
         } catch (\Exception $e) {
             return false;
+        }
+    }
+    public function productReportsByMonthAndBranch($request){
+        try {
+            $uid = $request['uid'];
+            $month = $request['month'];
+            $products = Product::where('created_by',$uid)->get();
+            $orders =  Order::where('created_for',$uid)
+            ->whereYear('created_at',date('Y'))
+            ->whereMonth('created_at',$month)
+            ->get('order_items');
+            if(isset($products) && isset($orders)){
+                foreach($products as $product){
+                    $prc = 0;
+                    $prq = 0;
+                    foreach($orders as $order){
+                        $order_items = json_decode($order->order_items);
+                        if(isset($order_items)){
+                            foreach($order_items as $order_item){
+                                if($order_item->id == $product->id){
+                                    $prc += 1;
+                                    $prq += $order_item->quantity;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    $pr[] = [
+                        'id'=>$product->id,
+                        'count'=>$prc,
+                        'quantity'=>$prq,
+                        'name'=>$product->name,
+                        'avatar'=>$product->product_image,
+                        'category'=>$product->category,
+                        'branch'=>$product->branch,
+                    ];
+
+                }
+            }
+            
+            return $pr;
+        } catch (\Exception $e) {
+            return [];
         }
     }
 
@@ -258,4 +317,17 @@ class OrderController extends Controller
             return abort(500,'ISE');
         }
     }
+
+    public function placeOrderFromPOS(Request $request){
+        try {
+            return response()->json("fef", 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code'=>500,
+                'status'=>false,
+                'msg'=>$e->getMessage()
+            ], 200);
+        }
+    }
+
 }

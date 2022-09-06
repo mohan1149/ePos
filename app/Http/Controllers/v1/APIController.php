@@ -977,7 +977,7 @@ class APIController extends Controller
         try {
             $order = $this->orderController->placeBusinessOrder($request);
             $response = [
-                'status' => true,
+                'status' => $order,
                 'order'=> $order,
             ];
             return response()->json($response, 200);
@@ -1075,6 +1075,24 @@ class APIController extends Controller
             return response()->json($error, 200);
         }
     }
+
+    public function monthlySalesByClient(Request $request){
+        try{
+            $orders = $this->orderController->businessOrderByMonthAndClient($request);
+            $response = [
+                'status' => true,
+                'orders'=>$orders
+            ];
+        return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
+    
 
     public function businessOrderInvoice(Request $request){
         try{
@@ -1288,6 +1306,22 @@ class APIController extends Controller
         }
     }
     
+    public function productReports(Request $request){
+        try {
+            $reports = $this->orderController->productReportsByMonthAndBranch($request);
+            $response = [
+                'status' => true,
+                'reports'=>$reports,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
     public function linkDevice(Request $request){
         try {
             $uid = $request['user_id'];

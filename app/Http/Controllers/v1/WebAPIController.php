@@ -43,11 +43,13 @@ class WebAPIController extends Controller
             $categories = $this->categoryController->getProductCategoriesByBranchId($request['bid']);
             $latest_products = $this->productController->getLatestProductsByBranchId($request['bid'],12);
             $settings = $this->userController->settings($request['uid']);
+            $branch_data  = $this->branchController->show($request['bid']);
             $meta_data = [
                 'sliders'=>$sliders,
                 'categories'=>$categories,
                 'latest_products'=>$latest_products,
                 'settings'=>$settings,
+                'branch_data'=>$branch_data,
             ];
             $reponse = [
                 'status' => true,

@@ -70,6 +70,7 @@ Route::post('/orders-by-staff','App\Http\Controllers\v1\APIController@ordersBySt
 Route::post('/delete-order','App\Http\Controllers\v1\APIController@deleteOrder');
 Route::post('/orders/monthly','App\Http\Controllers\v1\APIController@monthlyOrders');
 Route::post('/reports','App\Http\Controllers\v1\APIController@reports');
+Route::post('/product-reports','App\Http\Controllers\v1\APIController@productReports');
 Route::post('/update/settings','App\Http\Controllers\v1\APIController@updateSettings');
 Route::post('/link/device','App\Http\Controllers\v1\APIController@linkDevice');
 Route::post('/order-for-push-notification','App\Http\Controllers\v1\APIController@getOrderForPushNotification');
@@ -102,6 +103,7 @@ Route::post('/business-orders/update','App\Http\Controllers\v1\APIController@upd
 Route::post('/business-orders/delete','App\Http\Controllers\v1\APIController@deleteBusinessOrder');
 Route::post('/business-orders/all','App\Http\Controllers\v1\APIController@businessOrders');
 Route::post('/business-orders/monthly','App\Http\Controllers\v1\APIController@monthlyBusinessOrders');
+Route::post('/business-orders/monthly-by-client','App\Http\Controllers\v1\APIController@monthlySalesByClient');
 Route::get('/business-orders/download/{id}','App\Http\Controllers\v1\APIController@businessOrderInvoice');
 
   //
