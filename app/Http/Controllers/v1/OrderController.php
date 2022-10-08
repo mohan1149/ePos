@@ -112,6 +112,7 @@ class OrderController extends Controller
             $order = new BusinessOrder();
             $order->created_by = $request['uid'];
             $order->branch = $request['branch'];
+            $branch_name = Branch::find( $request['branch'])->branch;
             $order->driver = $request['driver'];
             $order->items = $request['items'];
             $order->client = $request['client'];
@@ -122,6 +123,7 @@ class OrderController extends Controller
             $order->discount = $request['discount'];
             $order->total_paid = $request['amount_paid'];
             $order->save();
+            $order->branch_name = $branch_name;
             $order_items = json_decode($request['items']);
             foreach ($order_items as $item) {
                 if($item->stock_item == 1){
@@ -160,7 +162,9 @@ class OrderController extends Controller
             return BusinessOrder::where('business_orders.created_by',$id)
             ->whereDate('business_orders.created_at',$date)
             ->leftJoin('business_clients as bc','bc.id','=','business_orders.client')
+            ->leftJoin('branches as bc','branch.id','=','business_orders.branch')
             ->select([
+                'branch.branch',
                 'bc.name',
                 'bc.address',
                 'bc.phone',
