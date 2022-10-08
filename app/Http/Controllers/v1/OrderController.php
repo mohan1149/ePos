@@ -145,9 +145,9 @@ class OrderController extends Controller
             return BusinessOrder::where('driver',$id)
             ->whereDate('business_orders.created_at',$date)
             ->leftJoin('business_clients as bc','bc.id','=','business_orders.client')
-            ->leftJoin('branches as bc','branch.id','=','business_orders.branch')
+            ->leftJoin('branches as branch','branch.id','=','business_orders.branch')
             ->select([
-                'branch.branch',
+                'branch.branch as branch_name',
                 'bc.name',
                 'bc.address',
                 'bc.phone',
@@ -155,7 +155,7 @@ class OrderController extends Controller
             ])
             ->get();
         } catch (\Exception $e) {
-            return [];
+            return $e->getMessage();
         }
     }
 
@@ -164,9 +164,9 @@ class OrderController extends Controller
             return BusinessOrder::where('business_orders.created_by',$id)
             ->whereDate('business_orders.created_at',$date)
             ->leftJoin('business_clients as bc','bc.id','=','business_orders.client')
-            ->leftJoin('branches as bc','branch.id','=','business_orders.branch')
+            ->leftJoin('branches as branch','branch.id','=','business_orders.branch')
             ->select([
-                'branch.branch',
+                'branch.branch as branch_name',
                 'bc.name',
                 'bc.address',
                 'bc.phone',
@@ -174,7 +174,7 @@ class OrderController extends Controller
             ])
             ->get();
         } catch (\Exception $e) {
-            return [];
+            return $e->getMessage();
         }
     }
     
