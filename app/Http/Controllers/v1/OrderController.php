@@ -145,7 +145,9 @@ class OrderController extends Controller
             return BusinessOrder::where('driver',$id)
             ->whereDate('business_orders.created_at',$date)
             ->leftJoin('business_clients as bc','bc.id','=','business_orders.client')
+            ->leftJoin('branches as bc','branch.id','=','business_orders.branch')
             ->select([
+                'branch.branch',
                 'bc.name',
                 'bc.address',
                 'bc.phone',
