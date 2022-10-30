@@ -162,4 +162,19 @@ class ProductController extends Controller
         }
     }
 
+
+
+    /// for CP
+    public function getMyProducts(){
+        try {
+            $products =  Product::where('products.created_by',auth()->user()->id)
+            ->join('branches as branch','branch.id','=','products.branch')
+            ->select(['products.*','branch.branch as product_branch'])
+            ->get();
+            return view('products.index',['products'=>$products]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
 }

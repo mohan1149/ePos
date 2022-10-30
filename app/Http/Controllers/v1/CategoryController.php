@@ -90,4 +90,19 @@ class CategoryController extends Controller
             return [];
         }
     }
+
+
+
+    //for CP
+    public function getMyCategories(){
+        try {
+            $categories =  Category::where('categories.created_by',auth()->user()->id)
+            ->join('branches as branch','branch.id','=','categories.branch')
+            ->select(['categories.*','branch.branch'])
+            ->get();
+            return view('categories.index',['categories'=>$categories]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

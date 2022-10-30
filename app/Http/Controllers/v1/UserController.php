@@ -29,7 +29,7 @@ class UserController extends Controller
             $user->save();
             return true;
         } catch (\Exception $e) {
-            return false;
+            return $e->getMessage();
         }
     }
 

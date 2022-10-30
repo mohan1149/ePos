@@ -75,4 +75,17 @@ class BranchController extends Controller
             return "";
         }
     }
+
+
+
+    //for control panel
+    public function getMyBranches(){
+
+        try {
+            $branches =  Branch::where('created_by',auth()->user()->id)->get();
+            return view('branches.index',['branches'=>$branches]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

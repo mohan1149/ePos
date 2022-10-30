@@ -22,6 +22,7 @@ use App\Http\Controllers\v1\UserController;
 use App\Http\Controllers\v1\OrderController;
 use App\Http\Controllers\v1\SliderController;
 use App\Http\Controllers\v1\BookingController;
+use App\Http\Controllers\BrandController;
 
 class WebAPIController extends Controller
 {
@@ -35,6 +36,8 @@ class WebAPIController extends Controller
         $this->orderController = new OrderController();
         $this->sliderController = new SliderController();
         $this->bookingController = new BookingController();
+        $this->brandController = new BrandController();
+
     }
 
     public function shopMetaData(Request $request){
@@ -42,12 +45,14 @@ class WebAPIController extends Controller
             $sliders = $this->sliderController->branchSliders($request['bid']);
             $categories = $this->categoryController->getProductCategoriesByBranchId($request['bid']);
             $latest_products = $this->productController->getLatestProductsByBranchId($request['bid'],12);
+            $brands = $this->brandController->getBrandsBranchId($request['bid']);
             $settings = $this->userController->settings($request['uid']);
             $branch_data  = $this->branchController->show($request['bid']);
             $meta_data = [
                 'sliders'=>$sliders,
                 'categories'=>$categories,
                 'latest_products'=>$latest_products,
+                'brands'=>$brands,
                 'settings'=>$settings,
                 'branch_data'=>$branch_data,
             ];

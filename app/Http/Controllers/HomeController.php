@@ -26,9 +26,9 @@ class HomeController extends Controller
             break;
             case 1:return view('admin.dashboard');
                 break;
-            case 2:return view('su.dashboard');
+            case 2:return view('driver.dashboard');
                 break;
-            case 3:return view('driver.dashboard');
+            case 3:return view('su.dashboard');
                 break;
             default:return view('dashboard');
         }

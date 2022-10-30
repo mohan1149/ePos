@@ -57,6 +57,7 @@ class UserController extends Controller
                 $user->name = strip_tags($request['username']);
                 $user->email = strip_tags($request['email']);
                 $user->phone = strip_tags($request['phone']);
+                $user->multi_branch = $request['multi_branch'];
                 $user->role = 1;
                 $user->branch = 0;
                 $user->created_by = 0;
@@ -72,6 +73,7 @@ class UserController extends Controller
                 $setting->save();
                 return redirect('/users');
             } catch (\Exception $e) {
+                return $e->getMessage();
                 return abort(500);
             }
         }else{

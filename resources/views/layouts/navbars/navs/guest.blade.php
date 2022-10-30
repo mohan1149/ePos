@@ -14,18 +14,18 @@
       <ul class="navbar-nav">
         <li class="nav-item">
           <a href="{{ route('home') }}" class="nav-link">
-            <i class="material-icons">dashboard</i> {{ __('Dashboard') }}
+            <i class="material-icons">dashboard</i> {{ __('t.dashboard') }}
           </a>
         </li>
 
         <li class="nav-item{{ $activePage ?? '' == 'login' ? ' active' : '' }}">
           <a href="{{ route('login') }}" class="nav-link">
-            <i class="material-icons">fingerprint</i> {{ __('Login') }}
+            <i class="material-icons">fingerprint</i> {{ __('t.login') }}
           </a>
         </li>
         <li class="nav-item ">
           <a href="{{ route('profile.edit') }}" class="nav-link">
-            <i class="material-icons">face</i> {{ __('Profile') }}
+            <i class="material-icons">face</i> {{ __('t.profile') }}
           </a>
         </li>
       </ul>

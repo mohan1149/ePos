@@ -30,6 +30,18 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
 	Route::get('/terminal','App\Http\Controllers\v1\OrderController@terminal');
 	Route::post('/create/order','App\Http\Controllers\v1\OrderController@placeOrderFromPOS');
+
+
+
+	///
+	Route::resource('/brands','App\Http\Controllers\BrandController');
+	Route::get('/branches','App\Http\Controllers\v1\BranchController@getMyBranches');
+	Route::get('/categories','App\Http\Controllers\v1\CategoryController@getMyCategories');
+	Route::get('/products','App\Http\Controllers\v1\ProductController@getMyProducts');
+
+	
+	
+
 });
 
 Route::get('/barcodes','App\Http\Controllers\v1\ProductController@barcodes');
