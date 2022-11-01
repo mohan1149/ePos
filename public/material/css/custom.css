@@ -1,3 +1,23 @@
 .text-red{
     color: red;
 }
+.hidden{
+    display: none;
+}
+.dataTables_filter label{
+    width: 100% !important;
+}
+.dataTables_length select.form-control {
+    background: none !important;
+    border: 2px solid #000;
+    border-radius: 5px;
+}
+.product_media_conatiner{
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+}
+.media-close{
+    float: right;
+    padding: 10px !important;
+}

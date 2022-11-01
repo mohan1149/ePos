@@ -8,10 +8,11 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table" id="productsTable">
                             <thead>
                                 <th>{{ __('t.image') }}</th>
                                 <th>{{ __('t.name') }}</th>
+                                <th>{{ __('t.sku') }}</th>
                                 <th>{{ __('t.price') }}</th>
                                 <th>{{ __('t.cost_price') }}</th>
                                 <th>{{ __('t.stock_item') }}</th>
@@ -27,6 +28,7 @@
                                         <td><img src="{{ $product->product_image }}" alt="image" width="70px"
                                                 height="70px"></td>
                                         <td>{{ $product->name }}</td>
+                                        <td>{{ $product->sku }}</td>
                                         <td>{{ $product->price }}</td>
                                         <td>{{ $product->cost_price }}</td>
                                         <td>
@@ -36,19 +38,29 @@
                                                 <span class="badge badge-danger">{{ __('t.no') }}</span>
                                             @endif
                                         </td>
-                                        <td>{{$product->stock}}</td>
+                                        <td>{{ $product->stock }}</td>
                                         <td>
                                             @if ($product->featured == 1)
-                                            <span class="badge badge-primary">{{ __('t.yes') }}</span>
-                                        @else
-                                            <span class="badge badge-danger">{{ __('t.no') }}</span>
-                                        @endif
+                                                <span class="badge badge-primary">{{ __('t.yes') }}</span>
+                                            @else
+                                                <span class="badge badge-danger">{{ __('t.no') }}</span>
+                                            @endif
                                         </td>
-                                        <td>{{$product->sale_count}}</td>
-                                        <td>{{$product->product_branch}}</td>
+                                        <td>{{ $product->sale_count }}</td>
+                                        <td>{{ $product->product_branch }}</td>
 
-                                        <td><a href="/brands/{{ $product->id }}/edit" target="_blank"
-                                                rel="noopener noreferrer">{{ __('t.edit') }}</a></td>
+                                        <td>
+                                            <a href="/products/{{ $product->id }}/edit" target="_blank"
+                                                rel="noopener noreferrer">
+                                                <i class="material-icons">edit</i>
+
+                                            </a>
+                                            <a href="/products/{{ $product->id }}/media" target="_blank"
+                                                rel="noopener noreferrer">
+                                                <i class="material-icons">perm_media</i>
+
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -58,4 +70,11 @@
             </div>
         </div>
     </div>
+@endsection
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('#productsTable').DataTable();
+        });
+    </script>
 @endsection

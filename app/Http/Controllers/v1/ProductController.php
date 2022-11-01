@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Branch;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Order;
@@ -176,5 +177,89 @@ class ProductController extends Controller
             return $e->getMessage();
         }
     }
+    public function editMyProduct(Request $request){
+        try {
+            $product = Product::where('id',$request['id'])->where('created_by',auth()->user()->id)->first();
+            $branches = Branch::where('created_by',auth()->user()->id)->get()->pluck('branch','id');
+            $brands = Brand::where('branch',$product->branch)->get()->pluck('name','id');
+            $categories = Category::where('branch',$product->branch)->where('type',0)->get()->pluck('category','id');
+            return view('products.edit',['product'=>$product,'branches'=>$branches,'brands'=>$brands,'categories'=>$categories]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
 
+        }
+    }
+
+    public function getCategoriesAndBrandsByBranch(Request $request){
+        try {
+            $categories = Category::where('branch',$request['bid'])->where('type',0)->get();
+            $brands = Brand::where('branch',$request['bid'])->get();
+            return response()->json(['categories'=>$categories,'brands'=>$brands], 200);
+        } catch (\Exception $e) {
+            return response()->json(['categories'=>[],'brands'=>[]], 200);
+        }
+
+    }
+    public function updateMyProduct(Request $request){
+        try {
+            $id = $request['id'];
+            $image = $request->file('product_image');
+            $product = Product::find($id);
+            if($image != "" && isset($image)){
+                $image_name  = uniqid().'.'.$image->getClientOriginalExtension();
+                $destination = 'storage/products';
+                $image->move($destination, $image_name );
+                $url = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
+                $product->product_image = $url;
+            }
+            $product->name = $request['product_name'];
+            $product->price = $request['product_price'];
+            $product->sku = $request['product_sku'];
+            $product->stock_item = $request['stock_item'];
+            $product->featured = $request['featured'];
+            $product->stock = $request['stock'];
+            $product->branch = $request['product_branch'];
+            $product->category = $request['category'];
+            $product->product_description = $request['product_description'];
+            $product->cost_price = $request['cost_price'];
+            $product->brand = $request['brand'];
+            $product->save();
+            return redirect('/products');
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function getProductMedia(Request $request){
+        try {
+            $product = Product::find($request['id']);
+            return view('products.media',['product'=>$product]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    public function updateProductMedia(Request $request){
+        try {
+            $product = Product::find($request['id']);
+            $url = [];
+            if($request['append'] == 1){
+                $url = json_decode($request['existing_media']);
+            }
+            if($request->hasfile('product_images')){
+                foreach($request->file('product_images') as $file){
+                    $image_name  = uniqid().'.'.$file->getClientOriginalExtension();
+                    $destination = 'storage/products';
+                    $file->move($destination, $image_name);
+                    $url[] = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
+                }
+            }
+            $product->product_images = json_encode($url);
+            $product->save();
+            return redirect('/products');
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    
+    
 }

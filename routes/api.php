@@ -117,3 +117,9 @@ Route::post('/track/order','App\Http\Controllers\v1\WebAPIController@trackOrder'
 Route::post('/products/branch','App\Http\Controllers\v1\WebAPIController@getBranchProducts');
 Route::post('/products/featured','App\Http\Controllers\v1\WebAPIController@getFeaturedBranchProducts');
 Route::post('/products/top-selling','App\Http\Controllers\v1\WebAPIController@getTopSellingBranchProducts');
+
+
+
+// Routes for CP
+
+Route::get('/categories-and-brands-by-branch/{bid}','App\Http\Controllers\v1\ProductController@getCategoriesAndBrandsByBranch');

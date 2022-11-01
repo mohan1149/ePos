@@ -48,7 +48,7 @@
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse" id="branches">
+                    <div class="collapse {{ Request::segment(1) == 'branches' ? ' show' : '' }}" id="branches">
                         <ul class="nav">
                             <li class="nav-item{{ Request::segment(1) == 'branches' ? ' active' : '' }}">
                                 <a class="nav-link" href="/branches">
@@ -72,7 +72,7 @@
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse" id="brands">
+                    <div class="collapse {{ Request::segment(1) == 'brands' ? ' show' : '' }}" id="brands">
                         <ul class="nav">
                             <li class="nav-item{{ Request::segment(1) == 'brands' ? ' active' : '' }}">
                                 <a class="nav-link" href="/brands">
@@ -96,7 +96,7 @@
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse" id="categories">
+                    <div class="collapse {{ Request::segment(1) == 'categories' ? ' show' : '' }}" id="categories">
                         <ul class="nav">
                             <li class="nav-item{{ Request::segment(1) == 'categories' ? ' active' : '' }}">
                                 <a class="nav-link" href="/categories">
@@ -120,7 +120,7 @@
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse" id="products">
+                    <div class="collapse {{ Request::segment(1) == 'products' ? ' show' : '' }}" id="products">
                         <ul class="nav">
                             <li class="nav-item{{ Request::segment(1) == 'products' ? ' active' : '' }}">
                                 <a class="nav-link" href="/products">
@@ -152,13 +152,13 @@
                                     <span class="sidebar-normal">{{ __('t.list_orders') }} </span>
                                 </a>
                             </li>
-							<li class="nav-item{{ Request::segment(1) == 'products' ? ' active' : '' }}">
+							<li class="nav-item{{ Request::segment(1) == 'orders' ? ' active' : '' }}">
                                 <a class="nav-link" href="/products/completed">
                                     <i class="material-icons">sync</i>
                                     <span class="sidebar-normal"> {{ __('t.arrived') }} </span>
                                 </a>
                             </li>
-                            <li class="nav-item{{ Request::segment(1) == 'products' ? ' active' : '' }}">
+                            <li class="nav-item{{ Request::segment(1) == 'orders' ? ' active' : '' }}">
                                 <a class="nav-link" href="/products/completed">
                                     <i class="material-icons">task_alt</i>
                                     <span class="sidebar-normal"> {{ __('t.completed') }} </span>

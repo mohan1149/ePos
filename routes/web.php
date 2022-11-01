@@ -38,6 +38,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/branches','App\Http\Controllers\v1\BranchController@getMyBranches');
 	Route::get('/categories','App\Http\Controllers\v1\CategoryController@getMyCategories');
 	Route::get('/products','App\Http\Controllers\v1\ProductController@getMyProducts');
+	Route::get('/products/{id}/edit','App\Http\Controllers\v1\ProductController@editMyProduct');
+	Route::post('/products/{id}/edit','App\Http\Controllers\v1\ProductController@updateMyProduct');
+	Route::get('/products/{id}/media','App\Http\Controllers\v1\ProductController@getProductMedia');
+	Route::post('/products/{id}/media','App\Http\Controllers\v1\ProductController@updateProductMedia');
 
 	
 	
