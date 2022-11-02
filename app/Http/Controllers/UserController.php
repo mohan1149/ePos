@@ -57,7 +57,7 @@ class UserController extends Controller
                 $user->name = strip_tags($request['username']);
                 $user->email = strip_tags($request['email']);
                 $user->phone = strip_tags($request['phone']);
-                $user->multi_branch = $request['multi_branch'];
+                $user->multi_branch = $request['multi_branch'] == "on" ? 1 : 0 ;
                 $user->role = 1;
                 $user->branch = 0;
                 $user->created_by = 0;
