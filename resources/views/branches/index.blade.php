@@ -8,9 +8,8 @@
               </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table">
+                <table class="table" id="branchesTable">
                   <thead>
-
                     <th>{{ __("t.image") }}</th>
                     <th>{{ __("t.name")}}</th>
                     <th>{{ __("t.phone")}}</th>
@@ -30,7 +29,7 @@
                         <td>{{$branch->whatsapp}}</td>
                         <td>{{$branch->instagram}}</td>
                         <td>{{$branch->address}}</td>
-                        <td><a href="/branches/{{$branch->id}}/edit" target="_blank" rel="noopener noreferrer">{{__("t.edit")}}</a></td>
+                        <td><a href="/branches/{{$branch->id}}/edit" rel="noopener noreferrer">{{__("t.edit")}}</a></td>
                       </tr>
                     @endforeach
                   </tbody>
@@ -40,4 +39,11 @@
         </div>
     </div>
 </div>
+@endsection
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('#branchesTable').DataTable();
+        });
+    </script>
 @endsection

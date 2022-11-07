@@ -50,12 +50,12 @@
                                         <td>{{ $product->product_branch }}</td>
 
                                         <td>
-                                            <a href="/products/{{ $product->id }}/edit" target="_blank"
+                                            <a href="/products/{{ $product->id }}/edit" 
                                                 rel="noopener noreferrer">
                                                 <i class="material-icons">edit</i>
 
                                             </a>
-                                            <a href="/products/{{ $product->id }}/media" target="_blank"
+                                            <a href="/products/{{ $product->id }}/media" 
                                                 rel="noopener noreferrer">
                                                 <i class="material-icons">perm_media</i>
 

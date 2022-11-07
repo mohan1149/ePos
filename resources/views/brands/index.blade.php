@@ -8,7 +8,7 @@
               </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table">
+                <table class="table" id="brandsTable">
                   <thead>
                     <th>{{ __("t.image") }}</th>
                     <th>{{ __("t.name")}}</th>
@@ -21,7 +21,7 @@
                         <td><img src="{{ $brand->brand_avatar }}" alt="image" width="70px" height="70px"></td>
                         <td>{{$brand->name}}</td>
                         <td>{{$brand->branch}}</td>
-                        <td><a href="/brands/{{$brand->id}}/edit" target="_blank" rel="noopener noreferrer">{{__("t.edit")}}</a></td>
+                        <td><a href="/brands/{{$brand->id}}/edit" rel="noopener noreferrer">{{__("t.edit")}}</a></td>
                       </tr>
                     @endforeach
                   </tbody>
@@ -31,4 +31,12 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('#brandsTable').DataTable();
+        });
+    </script>
 @endsection

@@ -92,7 +92,12 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-        //
+        try {
+            $branches = Branch::where('created_by',auth()->user()->id)->get()->pluck('branch','id');
+            return view('brands.edit',['branches'=>$branches,'brand'=>$brand]);
+        } catch (\Exception $e) {
+            return abort(500);
+        }
     }
 
     /**
@@ -105,6 +110,23 @@ class BrandController extends Controller
     public function update(Request $request, Brand $brand)
     {
         //
+        try {
+            $brand->name = $request['brand_name'];
+            $image = $request->file('avatar');
+            if($image !=""){
+                $image_name  = uniqid().'.'.$image->getClientOriginalExtension();
+                $destination = 'storage/products';
+                $image->move($destination, $image_name );
+                $url = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
+                $brand->brand_avatar = $url;
+            }
+            $brand->branch = $request['brand_branch'];
+            $brand->created_by = auth()->user()->id;
+            $brand->save();
+            return redirect('/brands');
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

@@ -4,91 +4,91 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header card-header-primary">
-                    <h4 class="card-title">{{ $product->name }}</h4>
+                    <h4 class="card-title">{{ __('t.add_product') }}</h4>
                 </div>
                 <div class="card-body">
-                    <form action="" method="post" enctype="multipart/form-data">
+                    <form class="p-3" action="" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label for="product_name">{{ __('t.name') }}</label>
-                                    {{ Form::text('product_name', $product->name, ['class' => 'form-control', 'required']) }}
+                                    {{ Form::text('product_name', null, ['class' => 'form-control', 'required']) }}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="product_sku">{{ __('t.sku') }}</label>
-                                    {{ Form::text('product_sku', $product->sku, ['class' => 'form-control', 'required']) }}
+                                    {{ Form::text('product_sku', null, ['class' => 'form-control', 'required']) }}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="product_branch">{{ __('t.branch') }}</label>
-                                    {{ Form::select('product_branch', $branches, $product->branch, ['class' => 'form-control product_branch', 'required']) }}
+                                    {{ Form::select('product_branch', $branches, null, ['class' => 'form-control product_branch', 'required']) }}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="category">{{ __('t.category') }}</label>
-                                    {{ Form::select('category', $categories, $product->category, ['class' => 'form-control product_category', 'required']) }}
+                                    {{ Form::select('category', [], null, ['class' => 'form-control product_category', 'required']) }}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="brand">{{ __('t.brand') }}</label>
-                                    {{ Form::select('brand', $brands, $product->brand, ['class' => 'form-control product_brand', 'required']) }}
+                                    {{ Form::select('brand', [], null, ['class' => 'form-control product_brand', 'required']) }}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="product_price">{{ __('t.price') }}</label>
-                                    {{ Form::text('product_price', $product->price, ['class' => 'form-control', 'required']) }}
+                                    {{ Form::text('product_price', null, ['class' => 'form-control', 'required']) }}
 
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="cost_price">{{ __('t.cost_price') }}</label>
-                                    {{ Form::text('cost_price', $product->cost_price, ['class' => 'form-control', 'required']) }}
+                                    {{ Form::text('cost_price', null, ['class' => 'form-control', 'required']) }}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     {{ Form::label('featured', __('t.featured')) }}
-                                    {{ Form::checkbox('featured',null, $product->featured == 1 ? true : false) }}
+                                    {{ Form::checkbox('featured', null,  true ) }}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     {{ Form::label('stock_item', __('t.stock_item')) }}
-                                    {{ Form::checkbox('stock_item', null, $product->stock_item == 1 ? true : false, ['class' => 'product_stock_item']) }}
+                                    {{ Form::checkbox('stock_item', null, false, ['class' => 'product_stock_item']) }}
                                 </div>
                             </div>
 
 
-                            <div class="col-md-4 product-stock {{ $product->stock_item != 1 ? 'hidden' : '' }}">
+                            <div class="col-md-4 product-stock hidden">
                                 <div class="form-group">
                                     <label for="stock">{{ __('t.stock') }}</label>
-                                    {{ Form::text('stock', $product->stock, ['class' => 'form-control', 'required']) }}
+                                    {{ Form::text('stock', 0, ['class' => 'form-control']) }}
                                 </div>
                             </div>
 
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="product_image">{{ __('t.product_image') }}</label>
-                                    {{ Form::file('product_image', ['class' => 'form-control']) }}
+                                    {{ Form::file('product_image', ['class' => 'form-control','required']) }}
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="product_description">{{ __('t.product_description') }}</label>
-                                    <textarea name="product_description" class="form-control" cols="30" rows="10">{{ $product->product_description }}</textarea>
+                                    <textarea name="product_description" class="form-control" cols="30" rows="10"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    {!! Form::submit(__("t.update"), ['class'=>'btn btn-primary']) !!}
+                                    {!! Form::submit(__("t.add"), ['class'=>'btn btn-primary']) !!}
                                 </div>
                             </div>
                             

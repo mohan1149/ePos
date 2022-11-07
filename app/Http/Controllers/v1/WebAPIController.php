@@ -171,4 +171,22 @@ class WebAPIController extends Controller
             return response()->json($error, 200);
         }
     }
+
+    public function getProductDetails(Request $request){
+        try {
+            $product = $this->productController->getProductByID($request['id']);
+            $reponse = [
+                'status' => true,
+                'product'=>$product,
+            ];
+            return response()->json($reponse, 200);
+        } catch (\Exception $e) {
+            $error = [
+                'status'=> false,
+                'error' => $e->getMessage(),
+                'line'=>$e->getLine(),
+            ];
+            return response()->json($error, 200);
+        }
+    }
 }

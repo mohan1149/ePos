@@ -163,6 +163,10 @@ class ProductController extends Controller
         }
     }
 
+    public function getProductByID($id){
+        return Product::find($id);
+    }
+
 
 
     /// for CP
@@ -215,8 +219,8 @@ class ProductController extends Controller
             $product->name = $request['product_name'];
             $product->price = $request['product_price'];
             $product->sku = $request['product_sku'];
-            $product->stock_item = $request['stock_item'];
-            $product->featured = $request['featured'];
+            $product->featured = $request['featured'] == 'on' ? 1 : 0;
+            $product->stock_item = $request['stock_item'] == 'on' ? 1 : 0;
             $product->stock = $request['stock'];
             $product->branch = $request['product_branch'];
             $product->category = $request['category'];
@@ -261,5 +265,44 @@ class ProductController extends Controller
         }
     }
     
+    public function createProduct(){
+        try {
+            $branches = Branch::where('created_by',auth()->user()->id)->get()->pluck('branch','id')->prepend('Choose Branch','0');
+            return view('products.create',['branches'=>$branches,'brands'=>[],'categories'=>[]]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+
+        }
+    }
+    public function storeProduct(Request $request){
+        try {
+            $image = $request->file('product_image');
+            $product = new Product();
+            if($image != "" && isset($image)){
+                $image_name  = uniqid().'.'.$image->getClientOriginalExtension();
+                $destination = 'storage/products';
+                $image->move($destination, $image_name );
+                $url = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
+                $product->product_image = $url;
+            }
+            $product->created_by = auth()->user()->id;
+            $product->name = $request['product_name'];
+            $product->price = $request['product_price'];
+            $product->sku = $request['product_sku'];
+            $product->stock_item = $request['stock_item'] == 'on' ? 1 : 0;
+            $product->featured = $request['featured'] == 'on' ? 1 : 0;
+            $product->stock = $request['stock'];
+            $product->branch = $request['product_branch'];
+            $product->category = $request['category'];
+            $product->product_description = $request['product_description'];
+            $product->cost_price = $request['cost_price'];
+            $product->brand = $request['brand'];
+            $product->save();
+            return redirect('/products');
+        } catch (\Exception $e) {
+            return $e->getMessage();
+
+        }
+    }
     
 }

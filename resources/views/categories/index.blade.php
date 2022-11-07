@@ -8,10 +8,10 @@
               </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table">
+                <table class="table" id="categoriesTable">
                   <thead>
                     <th>{{ __("t.image") }}</th>
-                    <th>{{ __("t.name")}}</th>
+                    <th>{{ __("t.category_name")}}</th>
                     <th>{{ __("t.branch")}}</th>
                     <th>{{ __("t.type")}}</th>
                     <th>{{ __("t.actions")}}</th>
@@ -30,7 +30,7 @@
                             @endif
                         
                         </td>
-                        <td><a href="/categories/{{$category->id}}/edit" target="_blank" rel="noopener noreferrer">{{__("t.edit")}}</a></td>
+                        <td><a href="/categories/{{$category->id}}/edit" rel="noopener noreferrer">{{__("t.edit")}}</a></td>
                       </tr>
                     @endforeach
                   </tbody>
@@ -40,4 +40,11 @@
         </div>
     </div>
 </div>
+@endsection
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('#categoriesTable').DataTable();
+        });
+    </script>
 @endsection

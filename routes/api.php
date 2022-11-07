@@ -115,6 +115,8 @@ Route::post('/products/category','App\Http\Controllers\v1\WebAPIController@produ
 Route::post('/process/order','App\Http\Controllers\v1\WebAPIController@processOrder');
 Route::post('/track/order','App\Http\Controllers\v1\WebAPIController@trackOrder');
 Route::post('/products/branch','App\Http\Controllers\v1\WebAPIController@getBranchProducts');
+Route::get('/product/{id}','App\Http\Controllers\v1\WebAPIController@getProductDetails');
+
 Route::post('/products/featured','App\Http\Controllers\v1\WebAPIController@getFeaturedBranchProducts');
 Route::post('/products/top-selling','App\Http\Controllers\v1\WebAPIController@getTopSellingBranchProducts');
 
