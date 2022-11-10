@@ -64,6 +64,7 @@ class ProductController extends Controller
             $product->stock = $request['stock'];
             $product->branch = $request['branch'];
             $product->category = $request['category'];
+            $product->product_description = $request['product_description'];
             $product->save();
             return true;
         } catch (\Exception $e) {
