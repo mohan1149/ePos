@@ -54,6 +54,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/products/{id}/edit','App\Http\Controllers\v1\ProductController@updateMyProduct');
 	Route::get('/products/{id}/media','App\Http\Controllers\v1\ProductController@getProductMedia');
 	Route::post('/products/{id}/media','App\Http\Controllers\v1\ProductController@updateProductMedia');
+	Route::get('/sliders','App\Http\Controllers\v1\SliderController@getSliders');
+	Route::get('/sliders/create','App\Http\Controllers\v1\SliderController@addSlider');
+	Route::post('/sliders/create','App\Http\Controllers\v1\SliderController@storeSlider');
+	Route::get('/sliders/{id}/edit','App\Http\Controllers\v1\SliderController@editSlider');
+	Route::post('/sliders/{id}/edit','App\Http\Controllers\v1\SliderController@updateSlider');
+
+
+
+
 
 	
 	

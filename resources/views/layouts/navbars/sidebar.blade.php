@@ -56,12 +56,14 @@
                                     <span class="sidebar-normal">{{ __('t.list_branches') }} </span>
                                 </a>
                             </li>
-                            <li class="nav-item{{ Request::segment(1) == 'branches' ? ' active' : '' }}">
-                                <a class="nav-link" href="/branches/create">
-                                    <i class="material-icons">add_circle</i>
-                                    <span class="sidebar-normal"> {{ __('t.add_branch') }} </span>
-                                </a>
-                            </li>
+                            @if (auth()->user()->multi_branch == 1)
+                                <li class="nav-item{{ Request::segment(1) == 'branches' ? ' active' : '' }}">
+                                    <a class="nav-link" href="/branches/create">
+                                        <i class="material-icons">add_circle</i>
+                                        <span class="sidebar-normal"> {{ __('t.add_branch') }} </span>
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </li>
@@ -209,7 +211,7 @@
                         </ul>
                     </div>
                 </li>
-				<li class="nav-item {{ Request::segment(1) == 'orders' ? ' active' : '' }}">
+                <li class="nav-item {{ Request::segment(1) == 'orders' ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#orders" aria-expanded="true">
                         <i class="material-icons">shopping_bag</i>
                         <p>{{ __('t.orders') }}
@@ -224,7 +226,7 @@
                                     <span class="sidebar-normal">{{ __('t.list_orders') }} </span>
                                 </a>
                             </li>
-							<li class="nav-item{{ Request::segment(1) == 'orders' ? ' active' : '' }}">
+                            <li class="nav-item{{ Request::segment(1) == 'orders' ? ' active' : '' }}">
                                 <a class="nav-link" href="/orders/completed">
                                     <i class="material-icons">sync</i>
                                     <span class="sidebar-normal"> {{ __('t.arrived') }} </span>
@@ -254,7 +256,7 @@
                                     <span class="sidebar-normal">{{ __('t.list_orders') }} </span>
                                 </a>
                             </li>
-							<li class="nav-item{{ Request::segment(1) == 'orders' ? ' active' : '' }}">
+                            <li class="nav-item{{ Request::segment(1) == 'orders' ? ' active' : '' }}">
                                 <a class="nav-link" href="/sales/completed">
                                     <i class="material-icons">sync</i>
                                     <span class="sidebar-normal"> {{ __('t.arrived') }} </span>

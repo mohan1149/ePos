@@ -55,5 +55,11 @@ return [
     'product_description'=>'Product Description',
     'edit_category'=>'Edit Category',
     'edit_brand'=>'Edit Brand',
-    'edit_branch'=>'Edit Branch'
+    'edit_branch'=>'Edit Branch',
+    'sliders'=>"Slider",
+    'list_sliders'=>'List Sliders',
+    'add_slider'=>'Add Slider',
+    'published'=>'Published',
+    'slider_caption'=>'Slider Caption',
+    'slider_text'=>'Slider Text'
 ];
