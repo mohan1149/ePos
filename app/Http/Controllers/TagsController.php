@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tags;
+use App\Models\Branch;
+
 use Illuminate\Http\Request;
 
 class TagsController extends Controller
@@ -15,6 +17,14 @@ class TagsController extends Controller
     public function index()
     {
         //
+        try {
+            $tags = Tags::where('branches.created_by',auth()->user()->id)
+            ->join('branches','branches.id','=','tags.branch')
+            ->get();
+            return view('tags.index',['tags'=>$tags]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -25,6 +35,12 @@ class TagsController extends Controller
     public function create()
     {
         //
+        try {
+            $branches = Branch::where('created_by',auth()->user()->id)->get()->pluck('branch','id');
+            return view('tags.create',['branches'=>$branches]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -35,7 +51,16 @@ class TagsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $branch = new Tags();
+            $branch->tag_name = $request['tag_name'];
+            $branch->branch = $request['branch'];
+            $branch->created_by = auth()->user()->id;
+            $branch->save();
+            return redirect('/tags');
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -55,9 +80,15 @@ class TagsController extends Controller
      * @param  \App\Models\Tags  $tags
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tags $tags)
+    public function edit(Request $request)
     {
-        //
+        try {
+            $tag = Tags::find($request['id']);
+            $branches = Branch::where('created_by',auth()->user()->id)->get()->pluck('branch','id');
+            return view('tags.edit',['branches'=>$branches,'tag'=>$tag]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -67,9 +98,17 @@ class TagsController extends Controller
      * @param  \App\Models\Tags  $tags
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tags $tags)
+    public function update(Request $request)
     {
-        //
+        try {
+            $branch = Tags::find($request['id']);
+            $branch->tag_name = $request['tag_name'];
+            $branch->branch = $request['branch'];
+            $branch->save();
+            return redirect('/tags');
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

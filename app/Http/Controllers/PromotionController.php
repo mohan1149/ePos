@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Promotion;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 
 class PromotionController extends Controller
@@ -25,6 +26,12 @@ class PromotionController extends Controller
     public function create()
     {
         //
+        try {
+            $branches = Branch::all()->pluck('branch','id');
+            return view('promotions.create',['branches'=>$branches]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

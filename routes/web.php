@@ -59,6 +59,12 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/sliders/create','App\Http\Controllers\v1\SliderController@storeSlider');
 	Route::get('/sliders/{id}/edit','App\Http\Controllers\v1\SliderController@editSlider');
 	Route::post('/sliders/{id}/edit','App\Http\Controllers\v1\SliderController@updateSlider');
+	Route::resource('/promotions', 'App\Http\Controllers\PromotionController');
+	Route::get('/tags/create', 'App\Http\Controllers\TagsController@create');
+	Route::get('/tags', 'App\Http\Controllers\TagsController@index');
+	Route::post('/tags', 'App\Http\Controllers\TagsController@store');
+	Route::get('/tags/{id}/edit', 'App\Http\Controllers\TagsController@edit');
+	Route::post('/tags/{id}/update', 'App\Http\Controllers\TagsController@update');
 
 
 

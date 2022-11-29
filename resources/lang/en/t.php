@@ -61,5 +61,9 @@ return [
     'add_slider'=>'Add Slider',
     'published'=>'Published',
     'slider_caption'=>'Slider Caption',
-    'slider_text'=>'Slider Text'
+    'slider_text'=>'Slider Text',
+    'add_tag'=>'Add Tag',
+    'list_tags'=>'List Tags',
+    'tag_name'=>'Tag Name',
+    'tags'=>'Tags'
 ];

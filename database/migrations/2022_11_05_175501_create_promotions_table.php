@@ -19,8 +19,9 @@ class CreatePromotionsTable extends Migration
             $table->bigInteger('branch');
             $table->string('promotion_banner')->nullable();
             $table->string('promotion_code')->nullable();
-            $table->string('promotion_products')->nullable();
             $table->date('promotion_expiry')->nullable();
+            $table->integer('promotion_discount')->default(0);
+
             $table->timestamps();
         });
     }
