@@ -65,5 +65,19 @@ return [
     'add_tag'=>'Add Tag',
     'list_tags'=>'List Tags',
     'tag_name'=>'Tag Name',
-    'tags'=>'Tags'
+    'tags'=>'Tags',
+    'promotions'=>'Promotions',
+    'promo_code'=>'Promo Code',
+    'promo_discount'=>'Promo Discount(%)',
+    'promo_expires_in'=>'Promo Expire Date',
+    'edit_promotion'=>'Edit Promotion',
+    'list_promotions'=>'List Promotions',
+    'add_promotion'=>'Add Promotion',
+    'users'=>'Users',
+    'list_users'=>'List Users',
+    'add_user'=>'Add User',
+    'edit_user'=>'Edit User',
+    'driver'=>'Driver',
+    'all_are_mandatory'=>"All Fields are mandatory",
+    'service_staff'=>'Service Staff'
 ];

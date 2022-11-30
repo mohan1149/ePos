@@ -8,13 +8,12 @@
                     <p class="card-category">{{ __('t.all_are_mandatory') }}</p>
                 </div>
                 <div class="card-body">
-                    <form action="/add-user" method="POST" enctype="multipart/form-data">
-                        @csrf
+                        {!! Form::open(['url'=>'employees','methos'=>'POST','files'=>true]) !!}
                         <div class="row p-2">
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="username">{{ __('t.username') }}</label>
-                                    <input type="text" id="username" name="username" class="form-control" required>
+                                    <label for="name">{{ __('t.name') }}</label>
+                                    <input type="text" id="name" name="name" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -37,14 +36,20 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
+                                    <label for="branch">{{ __('t.branch') }}</label>
+                                    {!! Form::select('branch', $branches, null, ['class'=>'form-control','required']) !!}
+
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
                                     <input type="file" name="avatar" class="form-control" required>
                                 </div>
                             </div>
-
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <input type="checkbox" id="multi_branch"name="multi_branch" checked>
-                                    <label for="multi_branch">{{ __('.enable_multi_branches') }}</label>
+                                    <input type="checkbox" id="driver"name="driver">
+                                    <label for="driver">{{ __('t.driver') }}</label>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -53,7 +58,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                        {!! Form::close() !!}
                 </div>
             </div>
         </div>

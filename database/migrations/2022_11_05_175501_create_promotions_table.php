@@ -20,8 +20,7 @@ class CreatePromotionsTable extends Migration
             $table->string('promotion_banner')->nullable();
             $table->string('promotion_code')->nullable();
             $table->date('promotion_expiry')->nullable();
-            $table->integer('promotion_discount')->default(0);
-
+            $table->float('promotion_discount')->default(0);
             $table->timestamps();
         });
     }

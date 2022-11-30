@@ -50,13 +50,11 @@
                                         <td>{{ $product->product_branch }}</td>
 
                                         <td>
-                                            <a href="/products/{{ $product->id }}/edit" 
-                                                rel="noopener noreferrer">
+                                            <a href="/products/{{ $product->id }}/edit" rel="noopener noreferrer">
                                                 <i class="material-icons">edit</i>
 
                                             </a>
-                                            <a href="/products/{{ $product->id }}/media" 
-                                                rel="noopener noreferrer">
+                                            <a href="/products/{{ $product->id }}/media" rel="noopener noreferrer">
                                                 <i class="material-icons">perm_media</i>
 
                                             </a>
@@ -74,7 +72,30 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('#productsTable').DataTable();
+            $('#productsTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [    
+                {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 9]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        }
+                    },
+                    'colvis'
+                ]
+            });
         });
     </script>
 @endsection

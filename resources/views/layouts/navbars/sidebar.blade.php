@@ -7,7 +7,7 @@
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li class="nav-item{{ Request::segment(1) == 'dashboard' ? ' active' : '' }}">
+            <li class="nav-item{{ Request::segment(1) == 'home' ? ' active' : '' }}">
                 <a class="nav-link" href="{{ route('home') }}">
                     <i class="material-icons">dashboard</i>
                     <p>{{ __('t.dashboard') }}</p>
@@ -24,18 +24,19 @@
                     </a>
                     <div class="collapse show" id="user_management">
                         <ul class="nav">
-                            <li class="nav-item{{ Request::segment(1) == 'add-user' ? ' active' : '' }}">
-                                <a class="nav-link" href="/add-user">
-                                    <i class="material-icons">person_add</i>
-                                    <span class="sidebar-normal">{{ __('t.add_user') }} </span>
-                                </a>
-                            </li>
-                            <li class="nav-item{{ Request::segment(1) == 'users' ? ' active' : '' }}">
-                                <a class="nav-link" href="/users">
+                            <li class="nav-item{{ Request::segment(1) == 'admins' ? ' active' : '' }}">
+                                <a class="nav-link" href="/admins">
                                     <i class="material-icons">person</i>
-                                    <span class="sidebar-normal"> {{ __('t.users') }} </span>
+                                    <span class="sidebar-normal"> {{ __('t.admins') }} </span>
                                 </a>
                             </li>
+                            <li class="nav-item{{ Request::segment(1) == 'admins' ? ' active' : '' }}">
+                                <a class="nav-link" href="/add-admin">
+                                    <i class="material-icons">person_add</i>
+                                    <span class="sidebar-normal">{{ __('t.add_admin') }} </span>
+                                </a>
+                            </li>
+                            
                         </ul>
                     </div>
                 </li>
@@ -64,6 +65,32 @@
                                     </a>
                                 </li>
                             @endif
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item {{ Request::segment(1) == 'users' ? ' active' : '' }}">
+                    <a class="nav-link" data-toggle="collapse" href="#users" aria-expanded="true">
+                        <i class="material-icons">people</i>
+                        <p>{{ __('t.users') }}
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse {{ Request::segment(1) == 'users' ? ' show' : '' }}" id="users">
+                        <ul class="nav">
+                            <li class="nav-item{{ Request::segment(1) == 'users' ? ' active' : '' }}">
+                                <a class="nav-link" href="/users">
+                                    <i class="material-icons">list</i>
+                                    <span class="sidebar-normal">{{ __('t.list_users') }} </span>
+                                </a>
+                            </li>
+
+                                <li class="nav-item{{ Request::segment(1) == 'users' ? ' active' : '' }}">
+                                    <a class="nav-link" href="/users/create">
+                                        <i class="material-icons">add_circle</i>
+                                        <span class="sidebar-normal"> {{ __('t.add_user') }} </span>
+                                    </a>
+                                </li>
+
                         </ul>
                     </div>
                 </li>

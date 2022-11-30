@@ -16,6 +16,16 @@ class PromotionController extends Controller
     public function index()
     {
         //
+        try {
+            $promotions = Promotion::where('promotions.created_by',auth()->user()->id)
+            ->join('branches','branches.id','=','promotions.branch')
+            ->select(['promotions.*','branches.branch'])
+            ->get();
+
+            return view('promotions.index',['promotions'=>$promotions]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -27,7 +37,7 @@ class PromotionController extends Controller
     {
         //
         try {
-            $branches = Branch::all()->pluck('branch','id');
+            $branches =  Branch::where('created_by',auth()->user()->id)->pluck('branch','id');
             return view('promotions.create',['branches'=>$branches]);
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -43,6 +53,26 @@ class PromotionController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            $promotion = new Promotion();
+            $promotion->promotion_code = $request['promotion_code'];
+            $image = $request->file('promo_image');
+            if($image !=""){
+                $image_name  = uniqid().'.'.$image->getClientOriginalExtension();
+                $destination = 'storage/products';
+                $image->move($destination, $image_name );
+                $url = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
+                $promotion->promotion_banner = $url;
+            }
+            $promotion->branch = $request['branch'];
+            $promotion->promotion_expiry = $request['promotion_expiry'];
+            $promotion->promotion_discount = $request['promotion_discount'];
+            $promotion->created_by = auth()->user()->id;
+            $promotion->save();
+            return redirect('/promotions');
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -65,6 +95,12 @@ class PromotionController extends Controller
     public function edit(Promotion $promotion)
     {
         //
+        try {
+            $branches = Branch::where('created_by',auth()->user()->id)->pluck('branch','id');
+            return view('promotions.edit',['branches'=>$branches,'promotion'=>$promotion]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -77,6 +113,24 @@ class PromotionController extends Controller
     public function update(Request $request, Promotion $promotion)
     {
         //
+        try {
+            $promotion->promotion_code = $request['promotion_code'];
+            $image = $request->file('promo_image');
+            if($image !=""){
+                $image_name  = uniqid().'.'.$image->getClientOriginalExtension();
+                $destination = 'storage/products';
+                $image->move($destination, $image_name );
+                $url = $request->getSchemeAndHttpHost().'/storage/products/'.$image_name;
+                $promotion->promotion_banner = $url;
+            }
+            $promotion->branch = $request['branch'];
+            $promotion->promotion_expiry = $request['promotion_expiry'];
+            $promotion->promotion_discount = $request['promotion_discount'];
+            $promotion->save();
+            return redirect('/promotions');
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

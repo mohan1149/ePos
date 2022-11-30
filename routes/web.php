@@ -22,9 +22,6 @@ Auth::routes([
 ]);
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
 Route::group(['middleware' => 'auth'], function () {
-	Route::get('/add-user', 'App\Http\Controllers\UserController@addUser');
-	Route::post('/add-user', 'App\Http\Controllers\UserController@storeUser');
-	Route::get('/users', 'App\Http\Controllers\UserController@listUsers');
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
@@ -34,6 +31,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 	///  for Control Panel
+	Route::get('/add-admin', 'App\Http\Controllers\UserController@addAdmin');
+	Route::post('/add-admin', 'App\Http\Controllers\UserController@storeAdmin');
+	Route::get('/admins', 'App\Http\Controllers\UserController@getAdmins');
+
+
 	Route::resource('/brands','App\Http\Controllers\BrandController');
 	Route::get('/branches','App\Http\Controllers\v1\BranchController@getMyBranches');
 	Route::get('/branches/create','App\Http\Controllers\v1\BranchController@createBranch');
@@ -65,6 +67,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/tags', 'App\Http\Controllers\TagsController@store');
 	Route::get('/tags/{id}/edit', 'App\Http\Controllers\TagsController@edit');
 	Route::post('/tags/{id}/update', 'App\Http\Controllers\TagsController@update');
+	Route::resource('/users','App\Http\Controllers\UserController');
 
 
 
