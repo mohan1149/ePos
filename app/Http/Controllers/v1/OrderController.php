@@ -109,8 +109,10 @@ class OrderController extends Controller
     public function placeBusinessOrder($request){
         try {
             DB::beginTransaction();
+            $prevInv = DB::table('business_orders')->where('created_by',$request['uid'])->max('invoice_id');
             $order = new BusinessOrder();
             $order->created_by = $request['uid'];
+            $order->invoice_id =  $prevInv + 1;
             $order->branch = $request['branch'];
             $branch_name = Branch::find( $request['branch'])->branch;
             $order->driver = $request['driver'];
