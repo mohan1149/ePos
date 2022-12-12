@@ -79,5 +79,17 @@ return [
     'edit_user'=>'Edit User',
     'driver'=>'Driver',
     'all_are_mandatory'=>"All Fields are mandatory",
-    'service_staff'=>'Service Staff'
+    'service_staff'=>'Service Staff',
+    'sales'=>'Sales',
+    'discount_percent'=>'Discount(%)',
+    'list_sales'=>'List Sales',
+    'order_for'=>'Order For',
+    'staff'=>'Staff',
+    'total'=>'Total',
+    'discount_amount'=>'Discount Amount',
+    'final_total'=>'Final Total',
+    'date'=>'Date',
+    'all'=>'All',
+    'monthly_sales'=>'Total Sales in the current month.',
+    'month'=>'Month'
 ];

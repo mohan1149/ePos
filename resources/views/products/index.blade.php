@@ -3,10 +3,14 @@
     <div class="content">
         <div class="container-fluid">
             <div class="card">
-                <div class="card-header card-header-primary">
+                <div class="card-header card-header-primary d-flex align-items-align-center">
                     <h4 class="card-title">{{ __('t.products') }}</h4>
+                    <a class="btn btn-info" href="/products/create">{{__("t.add_product")}}</a>
                 </div>
                 <div class="card-body">
+                    @php
+                    $settings = session('settings');
+                @endphp
                     <div class="table-responsive">
                         <table class="table" id="productsTable">
                             <thead>
@@ -29,8 +33,8 @@
                                                 height="70px"></td>
                                         <td>{{ $product->name }}</td>
                                         <td>{{ $product->sku }}</td>
-                                        <td>{{ $product->price }}</td>
-                                        <td>{{ $product->cost_price }}</td>
+                                        <td>{{ number_format($product->price,$settings->decimal_points) }}</td>
+                                        <td>{{ number_format($product->cost_price,$settings->decimal_points) }}</td>
                                         <td>
                                             @if ($product->stock_item == 1)
                                                 <span class="badge badge-primary">{{ __('t.yes') }}</span>
@@ -93,7 +97,6 @@
                             columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
                         }
                     },
-                    'colvis'
                 ]
             });
         });

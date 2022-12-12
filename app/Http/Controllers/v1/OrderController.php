@@ -7,6 +7,7 @@ use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Setting;
 use App\Models\OutSideOrder;
 use App\Models\BusinessOrder;
@@ -17,6 +18,32 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+
+    public function index(Request $request){
+        try {
+
+            if(auth()->user()->role == 1 ) {
+                $branches = Branch::where('created_by',auth()->user()->id)->get()->pluck('branch','id')->prepend(__("t.all"),0);
+                $users = User::where('created_by',auth()->user()->id)->get()->pluck('name','id')->prepend(__('t.all'),0);
+                $sales = Order::where('orders.created_for',auth()->user()->id)
+                ->join('branches','branches.id','=','orders.branch')
+                ->join('users','users.id','=','orders.staff')
+                ->whereMonth('orders.created_at', isset($request['month']) ? $request['month'] : date('m'))
+                ->when( ($request['branch'] !== '0' && isset($request['branch'])), function ($query) use ($request) {
+                    $query->where('orders.branch', $request['branch']);
+                })
+                ->when( ($request['staff'] !== '0' && isset($request['staff'])), function ($query) use ($request) {
+                    $query->where('orders.staff', $request['staff']);
+                })
+                ->select(['orders.*','branches.branch','users.name'])
+                ->get();
+                return view('sales.index',['sales'=>$sales,'branches'=>$branches,'users'=>$users]);
+            }
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function orderForPushNotification($id){
         try {
             $order = Order::find($id);

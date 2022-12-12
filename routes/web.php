@@ -68,12 +68,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/tags/{id}/edit', 'App\Http\Controllers\TagsController@edit');
 	Route::post('/tags/{id}/update', 'App\Http\Controllers\TagsController@update');
 	Route::resource('/users','App\Http\Controllers\UserController');
+	Route::resource('/sales','App\Http\Controllers\v1\OrderController');
 
 
-
-
-
-	
 	
 
 });

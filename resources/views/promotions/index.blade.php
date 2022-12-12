@@ -3,8 +3,10 @@
 <div class="content">
     <div class="container-fluid">
         <div class="card">
-            <div class="card-header card-header-primary">
+            <div class="card-header card-header-primary d-flex align-items-align-center">
                 <h4 class="card-title">{{ __('t.promotions') }}</h4>
+                <a class="btn btn-info" href="/promotions/create">{{__("t.add_promotion")}}</a>
+
               </div>
             <div class="card-body">
               <div class="table-responsive">

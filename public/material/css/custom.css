@@ -21,3 +21,7 @@
     float: right;
     padding: 10px !important;
 }
+.align-items-align-center{
+    align-items: center !important;
+    justify-content: space-between;
+}

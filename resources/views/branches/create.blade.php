@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header card-header-primary">
-                    <h4 class="card-title">{{ __('t.add_category') }}</h4>
+                    <h4 class="card-title">{{ __('t.add_branch') }}</h4>
                 </div>
                 <div class="card-body">
                     <form action="/branches/create" method="POST" enctype="multipart/form-data">

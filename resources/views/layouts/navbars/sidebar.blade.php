@@ -118,110 +118,14 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item {{ Request::segment(1) == 'tags' ? ' active' : '' }}">
-                    <a class="nav-link" data-toggle="collapse" href="#tags" aria-expanded="true">
-                        <i class="material-icons">sell</i>
-                        <p>{{ __('t.tags') }}
-                            <b class="caret"></b>
-                        </p>
-                    </a>
-                    <div class="collapse {{ Request::segment(1) == 'tags' ? ' show' : '' }}" id="tags">
-                        <ul class="nav">
-                            <li class="nav-item{{ Request::segment(1) == 'tags' ? ' active' : '' }}">
-                                <a class="nav-link" href="/tags">
-                                    <i class="material-icons">list</i>
-                                    <span class="sidebar-normal">{{ __('t.list_tags') }} </span>
-                                </a>
-                            </li>
-                            <li class="nav-item{{ Request::segment(1) == 'tags' ? ' active' : '' }}">
-                                <a class="nav-link" href="/tags/create">
-                                    <i class="material-icons">add_circle</i>
-                                    <span class="sidebar-normal"> {{ __('t.add_tag') }} </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item {{ Request::segment(1) == 'promotions' ? ' active' : '' }}">
-                    <a class="nav-link" data-toggle="collapse" href="#promotions" aria-expanded="true">
-                        <i class="material-icons">rocket_launch</i>
-                        <p>{{ __('t.promotions') }}
-                            <b class="caret"></b>
-                        </p>
-                    </a>
-                    <div class="collapse {{ Request::segment(1) == 'promotions' ? ' show' : '' }}" id="promotions">
-                        <ul class="nav">
-                            <li class="nav-item{{ Request::segment(1) == 'promotions' ? ' active' : '' }}">
-                                <a class="nav-link" href="/promotions">
-                                    <i class="material-icons">list</i>
-                                    <span class="sidebar-normal">{{ __('t.list_promotions') }} </span>
-                                </a>
-                            </li>
-                            <li class="nav-item{{ Request::segment(1) == 'promotions' ? ' active' : '' }}">
-                                <a class="nav-link" href="/promotions/create">
-                                    <i class="material-icons">add_circle</i>
-                                    <span class="sidebar-normal"> {{ __('t.add_promotion') }} </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item {{ Request::segment(1) == 'brands' ? ' active' : '' }}">
-                    <a class="nav-link" data-toggle="collapse" href="#brands" aria-expanded="true">
-                        <i class="material-icons">diamond</i>
-                        <p>{{ __('t.brands') }}
-                            <b class="caret"></b>
-                        </p>
-                    </a>
-                    <div class="collapse {{ Request::segment(1) == 'brands' ? ' show' : '' }}" id="brands">
-                        <ul class="nav">
-                            <li class="nav-item{{ Request::segment(1) == 'brands' ? ' active' : '' }}">
-                                <a class="nav-link" href="/brands">
-                                    <i class="material-icons">list</i>
-                                    <span class="sidebar-normal">{{ __('t.list_brands') }} </span>
-                                </a>
-                            </li>
-                            <li class="nav-item{{ Request::segment(1) == 'brands' ? ' active' : '' }}">
-                                <a class="nav-link" href="/brands/create">
-                                    <i class="material-icons">add_circle</i>
-                                    <span class="sidebar-normal"> {{ __('t.add_brand') }} </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item {{ Request::segment(1) == 'categories' ? ' active' : '' }}">
-                    <a class="nav-link" data-toggle="collapse" href="#categories" aria-expanded="true">
-                        <i class="material-icons">category</i>
-                        <p>{{ __('t.categories') }}
-                            <b class="caret"></b>
-                        </p>
-                    </a>
-                    <div class="collapse {{ Request::segment(1) == 'categories' ? ' show' : '' }}" id="categories">
-                        <ul class="nav">
-                            <li class="nav-item{{ Request::segment(1) == 'categories' ? ' active' : '' }}">
-                                <a class="nav-link" href="/categories">
-                                    <i class="material-icons">list</i>
-                                    <span class="sidebar-normal">{{ __('t.list_categories') }} </span>
-                                </a>
-                            </li>
-                            <li class="nav-item{{ Request::segment(1) == 'categories' ? ' active' : '' }}">
-                                <a class="nav-link" href="/categories/create">
-                                    <i class="material-icons">add_circle</i>
-                                    <span class="sidebar-normal"> {{ __('t.add_category') }} </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item {{ Request::segment(1) == 'products' ? ' active' : '' }}">
+                <li class="nav-item {{  in_array(Request::segment(1),['products','tags','categories','brands','promotions'])  ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="true">
                         <i class="material-icons">shopping_cart</i>
                         <p>{{ __('t.products') }}
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse {{ Request::segment(1) == 'products' ? ' show' : '' }}" id="products">
+                    <div class="collapse {{  in_array(Request::segment(1),['products','tags','categories','brands','promotions']) ? ' show' : '' }}" id="products">
                         <ul class="nav">
                             <li class="nav-item{{ Request::segment(1) == 'products' ? ' active' : '' }}">
                                 <a class="nav-link" href="/products">
@@ -229,15 +133,62 @@
                                     <span class="sidebar-normal">{{ __('t.list_products') }} </span>
                                 </a>
                             </li>
-                            <li class="nav-item{{ Request::segment(1) == 'products' ? ' active' : '' }}">
-                                <a class="nav-link" href="/products/create">
+                            <li class="nav-item{{ Request::segment(1) == 'tags' ? ' active' : '' }}">
+                                <a class="nav-link" href="/tags">
+                                    <i class="material-icons">sell</i>
+                                    <span class="sidebar-normal"> {{ __('t.tags') }} </span>
+                                </a>
+                            </li>
+                            <li class="nav-item{{ Request::segment(1) == 'categories' ? ' active' : '' }}">
+                                <a class="nav-link" href="/categories">
+                                    <i class="material-icons">category</i>
+                                    <span class="sidebar-normal"> {{ __('t.categories') }} </span>
+                                </a>
+                            </li>
+                            <li class="nav-item{{ Request::segment(1) == 'brands' ? ' active' : '' }}">
+                                <a class="nav-link" href="/brands">
+                                    <i class="material-icons">diamond</i>
+                                    <span class="sidebar-normal"> {{ __('t.brands') }} </span>
+                                </a>
+                            </li>
+                            <li class="nav-item{{ Request::segment(1) == 'promotions' ? ' active' : '' }}">
+                                <a class="nav-link" href="/promotions">
+                                    <i class="material-icons">rocket_launch</i>
+                                    <span class="sidebar-normal"> {{ __('t.promotions') }} </span>
+                                </a>
+                            </li>
+                            
+                            
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item {{ Request::segment(1) == 'services' ? ' active' : '' }}">
+                    <a class="nav-link" data-toggle="collapse" href="#services" aria-expanded="true">
+                        <i class="material-icons">favorite</i>
+                        <p>{{ __('t.services') }}
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse {{ Request::segment(1) == 'services' ? ' show' : '' }}" id="services">
+                        <ul class="nav">
+                            <li class="nav-item{{ Request::segment(1) == 'services' ? ' active' : '' }}">
+                                <a class="nav-link" href="/services">
+                                    <i class="material-icons">list</i>
+                                    <span class="sidebar-normal">{{ __('t.list_services') }} </span>
+                                </a>
+                            </li>
+                            <li class="nav-item{{ Request::segment(1) == 'services' ? ' active' : '' }}">
+                                <a class="nav-link" href="/services/create">
                                     <i class="material-icons">add_circle</i>
-                                    <span class="sidebar-normal"> {{ __('t.add_product') }} </span>
+                                    <span class="sidebar-normal"> {{ __('t.add_service') }} </span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
+
                 <li class="nav-item {{ Request::segment(1) == 'orders' ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#orders" aria-expanded="true">
                         <i class="material-icons">shopping_bag</i>
@@ -268,35 +219,44 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item {{ Request::segment(1) == 'sales' ? ' active' : '' }}">
-                    <a class="nav-link" data-toggle="collapse" href="#sales" aria-expanded="true">
-                        <i class="material-icons">payments</i>
-                        <p>{{ __('t.sales') }}
+
+                
+                <li class="nav-item {{ Request::segment(1) == 'business' ? ' active' : '' }}">
+                    <a class="nav-link" data-toggle="collapse" href="#business" aria-expanded="true">
+                        <i class="material-icons">business_center</i>
+                        <p>{{ __('t.business') }}
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse" id="sales">
+
+                    <div class="collapse" id="business">
                         <ul class="nav">
-                            <li class="nav-item{{ Request::segment(1) == 'sales' ? ' active' : '' }}">
-                                <a class="nav-link" href="/sales">
+                            <li class="nav-item{{ Request::segment(1) == 'business' ? ' active' : '' }}">
+                                <a class="nav-link" href="/business/orders">
                                     <i class="material-icons">list</i>
-                                    <span class="sidebar-normal">{{ __('t.list_orders') }} </span>
+                                    <span class="sidebar-normal">{{ __('t.business_orders') }} </span>
                                 </a>
                             </li>
                             <li class="nav-item{{ Request::segment(1) == 'orders' ? ' active' : '' }}">
-                                <a class="nav-link" href="/sales/completed">
-                                    <i class="material-icons">sync</i>
-                                    <span class="sidebar-normal"> {{ __('t.arrived') }} </span>
+                                <a class="nav-link" href="/business/clients">
+                                    <i class="material-icons">account_box</i>
+                                    <span class="sidebar-normal"> {{ __('t.business_clients') }} </span>
                                 </a>
                             </li>
                             <li class="nav-item{{ Request::segment(1) == 'orders' ? ' active' : '' }}">
-                                <a class="nav-link" href="/sales/completed">
-                                    <i class="material-icons">task_alt</i>
-                                    <span class="sidebar-normal"> {{ __('t.completed') }} </span>
+                                <a class="nav-link" href="/business/reports">
+                                    <i class="material-icons">receipt</i>
+                                    <span class="sidebar-normal"> {{ __('t.reports') }} </span>
                                 </a>
                             </li>
                         </ul>
                     </div>
+                </li>
+                <li class="nav-item{{ Request::segment(1) == 'sales' ? ' active' : '' }}">
+                    <a class="nav-link" href="/sales">
+                        <i class="material-icons">payments</i>
+                        <p>{{ __('t.sales') }}</p>
+                    </a>
                 </li>
                 <li class="nav-item{{ Request::segment(1) == 'settings' ? ' active' : '' }}">
                     <a class="nav-link" href="/settings">

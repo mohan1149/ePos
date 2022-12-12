@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Setting;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -19,8 +21,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
+        if (!$request->session()->has('settings')) {
+            $settings = Setting::where('created_by',auth()->user()->id)->first();
+            $request->session()->put('settings', $settings);
+            return $settings;
+        }
         switch(auth()->user()->role){
             case 0: return view('staff.dashboard');
             break;

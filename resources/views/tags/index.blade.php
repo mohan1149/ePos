@@ -3,8 +3,9 @@
 <div class="content">
     <div class="container-fluid">
         <div class="card">
-            <div class="card-header card-header-primary">
+            <div class="card-header card-header-primary d-flex align-items-align-center">
                 <h4 class="card-title">{{ __('t.tags') }}</h4>
+                <a class="btn btn-info" href="/tags/create">{{__("t.add_tag")}}</a>
               </div>
             <div class="card-body">
               <div class="table-responsive">
