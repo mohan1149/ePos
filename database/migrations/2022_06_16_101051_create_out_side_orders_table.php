@@ -25,8 +25,9 @@ class CreateOutSideOrdersTable extends Migration
             $table->string('cust_email')->nullable();
             $table->string('cust_state')->nullable();
             $table->string('cust_city')->nullable();
-            $table->string('cust_town')->nullable();
-            $table->string('cust_block_avenue')->nullable();
+            $table->string('cust_area')->nullable();
+            $table->string('cust_block')->nullable();
+            $table->string('cust_avenue')->nullable();
             $table->string('cust_street')->nullable();
             $table->string('cust_house_apartment')->nullable();
             $table->string('cust_landmark')->nullable();

@@ -25,3 +25,6 @@
     align-items: center !important;
     justify-content: space-between;
 }
+.justify-centent-space-between{
+    justify-content: space-between;
+}

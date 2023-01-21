@@ -134,6 +134,7 @@ class ProductController extends Controller
         try {
             return Product::where('branch',$bid)
                 ->orderBy('sale_count','DESC')
+                ->limit(4)
                 ->get();
         } catch (\Exception $e) {
             return [];

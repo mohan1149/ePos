@@ -25,6 +25,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
+	
+	
 	Route::get('/terminal','App\Http\Controllers\v1\OrderController@terminal');
 	Route::post('/create/order','App\Http\Controllers\v1\OrderController@placeOrderFromPOS');
 
@@ -34,8 +36,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/add-admin', 'App\Http\Controllers\UserController@addAdmin');
 	Route::post('/add-admin', 'App\Http\Controllers\UserController@storeAdmin');
 	Route::get('/admins', 'App\Http\Controllers\UserController@getAdmins');
-
-
 	Route::resource('/brands','App\Http\Controllers\BrandController');
 	Route::get('/branches','App\Http\Controllers\v1\BranchController@getMyBranches');
 	Route::get('/branches/create','App\Http\Controllers\v1\BranchController@createBranch');
@@ -47,11 +47,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/categories/create','App\Http\Controllers\v1\CategoryController@storeCategory');
 	Route::get('/categories/{id}/edit','App\Http\Controllers\v1\CategoryController@editCategory');
 	Route::post('/categories/{id}/edit','App\Http\Controllers\v1\CategoryController@updateCategory');
-
 	Route::get('/products','App\Http\Controllers\v1\ProductController@getMyProducts');
 	Route::get('/products/create','App\Http\Controllers\v1\ProductController@createProduct');
 	Route::post('/products/create','App\Http\Controllers\v1\ProductController@storeProduct');
-
 	Route::get('/products/{id}/edit','App\Http\Controllers\v1\ProductController@editMyProduct');
 	Route::post('/products/{id}/edit','App\Http\Controllers\v1\ProductController@updateMyProduct');
 	Route::get('/products/{id}/media','App\Http\Controllers\v1\ProductController@getProductMedia');
@@ -69,6 +67,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/tags/{id}/update', 'App\Http\Controllers\TagsController@update');
 	Route::resource('/users','App\Http\Controllers\UserController');
 	Route::resource('/sales','App\Http\Controllers\v1\OrderController');
+	Route::get('/services','App\Http\Controllers\v1\ServiceController@listServices');
+	Route::get('/services/create','App\Http\Controllers\v1\ServiceController@create');
+	Route::post('/services/create','App\Http\Controllers\v1\ServiceController@store');
+	Route::get('/services/{id}/edit','App\Http\Controllers\v1\ServiceController@edit');
+	Route::post('/services/{id}/edit','App\Http\Controllers\v1\ServiceController@updateService');
+	Route::get('/orders','App\Http\Controllers\v1\OrderController@getOrders');
+	Route::get('/orders/{id}','App\Http\Controllers\v1\OrderController@viewOrder');
 
 
 	

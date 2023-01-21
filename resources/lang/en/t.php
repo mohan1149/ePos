@@ -91,5 +91,11 @@ return [
     'date'=>'Date',
     'all'=>'All',
     'monthly_sales'=>'Total Sales in the current month.',
-    'month'=>'Month'
+    'month'=>'Month',
+    'edit_slider'=>'Edit Slider',
+    'add_service'=>'Add Service',
+    'list_services'=>'List Services',
+    'services'=>'Services',
+    'choose'=>'Choose',
+    'edit_service'=>'Edit Service'
 ];

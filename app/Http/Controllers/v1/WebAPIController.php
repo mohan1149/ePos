@@ -42,9 +42,14 @@ class WebAPIController extends Controller
 
     public function shopMetaData(Request $request){
         try {
+            $token = NULL;
+            if($request['token'] == true){
+                $token = uniqid();
+            }
             $sliders = $this->sliderController->branchSliders($request['bid']);
             $categories = $this->categoryController->getProductCategoriesByBranchId($request['bid']);
-            $latest_products = $this->productController->getLatestProductsByBranchId($request['bid'],12);
+            $latest_products = $this->productController->getLatestProductsByBranchId($request['bid'],4);
+            $top_products = $this->productController->topSellingProducts($request['bid'],4);
             $brands = $this->brandController->getBrandsBranchId($request['bid']);
             $settings = $this->userController->settings($request['uid']);
             $branch_data  = $this->branchController->show($request['bid']);
@@ -52,9 +57,11 @@ class WebAPIController extends Controller
                 'sliders'=>$sliders,
                 'categories'=>$categories,
                 'latest_products'=>$latest_products,
+                'top_products'=>$top_products,
                 'brands'=>$brands,
                 'settings'=>$settings,
                 'branch_data'=>$branch_data,
+                'token'=>$token,
             ];
             $reponse = [
                 'status' => true,

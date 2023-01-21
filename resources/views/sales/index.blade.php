@@ -41,7 +41,7 @@
                             {!! Form::close() !!}
                     </div>
                     <div class="table-responsive">
-                        <table class="table" id="productsTable">
+                        <table class="table" id="salesTable">
                             <thead>
                                 <th>{{ __('t.order_for') }}</th>
                                 <th>{{ __('t.branch') }}</th>
@@ -82,26 +82,26 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('#productsTable').DataTable({
+            $('#salesTable').DataTable({
                 dom: 'Bfrtip',
                 buttons: [    
                 {
                         extend: 'print',
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7.8]
+                            columns: [0,1, 2, 3, 4, 5, 6, 7]
                         }
                     },
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7.8]
+                            columns: [0,1, 2, 3, 4, 5, 6, 7]
 
                         }
                     },
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7.8]
+                            columns: [0,1, 2, 3, 4, 5, 6, 7]
 
                         }
                     },

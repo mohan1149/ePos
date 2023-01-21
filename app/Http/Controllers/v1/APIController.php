@@ -1123,6 +1123,9 @@ class APIController extends Controller
             $order->discount = $request['discount'];
             $order->discount_amount = $request['discount_amount'];
             $order->final_total = $request['final_total'];
+            $order->pay_type = $request['pay_type'];
+            $order->order_type = $request['order_type'];
+            $order->delivery_address = $request['delivery_address'];
             $order->save();
             $order_items = json_decode($request['order_items']);
             foreach ($order_items as $item) {

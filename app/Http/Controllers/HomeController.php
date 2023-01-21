@@ -26,7 +26,6 @@ class HomeController extends Controller
         if (!$request->session()->has('settings')) {
             $settings = Setting::where('created_by',auth()->user()->id)->first();
             $request->session()->put('settings', $settings);
-            return $settings;
         }
         switch(auth()->user()->role){
             case 0: return view('staff.dashboard');
