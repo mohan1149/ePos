@@ -147,7 +147,7 @@ class SliderController extends Controller
             $slider->slider_caption = $request['slider_caption'];
             $slider->slider_text = $request['slider_text'];
             $slider->published = $request['published'] === "on" ? 1 : 0;
-            $slider->branch = $request['slider_branch'];
+            $slider->branch = $request['branch'];
             $slider->category_id = $request['category'];
             $slider->save();
             return redirect('/sliders');

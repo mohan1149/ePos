@@ -11,6 +11,50 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    {{-- modal --}}
+                    <div class="modal fade" id="createSaleModal" tabindex="-1" role="dialog"
+                        aria-labelledby="createSaleModalTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createSaleModalTitle">{{ __('t.create_sale') }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h4>{{ __('t.payment_type') }}</h4>
+                                    <div class="d-flex">
+                                        <button class="btn btn-secondary sale-pay-type active" id="sale-btn-cash">
+                                            <img src="{{'/material/img/cash.png'}}" class="sale-modal-img"/>
+                                        </button>
+                                        <button class="btn btn-secondary sale-pay-type" id="sale-btn-knet">
+                                            <img src="{{'/material/img/knet.png'}}" class="sale-modal-img"/>
+                                        </button>
+                                    </div>
+                                    <h4>{{ __('t.sale_type') }}</h4>
+                                    <div class="d-flex">
+                                        <button class="btn btn-secondary sale-type active" id="sale-btn-pickup">
+                                            <img src="{{'/material/img/pickup.png'}}" class="sale-modal-img"/>
+                                        </button>
+                                        <button class="btn btn-secondary sale-type" id="sale-btn-delivery">
+                                            <img src="{{'/material/img/delivery.png'}}" class="sale-modal-img"/>
+                                        </button>
+                                    </div>
+                                    <div class="hidden" id="sale-delivery-notes">
+                                        <h5>{{ __('t.delivery_notes') }}</h5>
+                                        <textarea style="width:100%"  cols="30" rows="10"></textarea>
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('t.close') }}</button>
+                                    <button type="button" class="btn btn-primary" id="cofirm-order">{{ __('t.create_order') }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- end modal --}}
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
@@ -132,12 +176,13 @@
                                 </div>
                             </div>
                             <div>
-                                <button class="btn btn-success" id="cofirm-order">Confirm
+
+                                <button class="btn btn-success" data-toggle="modal"
+                                    data-target="#createSaleModal">Confirm
                                     <strong id="grand-total">
                                         [{{ number_format(0, $settings->decimal_points) }}]
                                     </strong>
                                 </button>
-                                <button class="btn btn-primary">Save</button>
                             </div>
                         </div>
                     </div>
@@ -153,9 +198,33 @@
         let discount = 0;
         let order_for = "Walkin Customer";
         let decimal_points = {{ $settings->decimal_points }};
+        let payment_type = "cash";
+        let sale_type = "pickup";
         // let products = {!! json_encode($products) !!};
         // let filtered = products;
         $(document).ready(function() {
+            $('#sale-btn-cash').on('click',(e)=>{
+                payment_type = 'cash';
+                $('#sale-btn-cash').addClass('active');
+                $('#sale-btn-knet').removeClass('active');
+            })
+            $('#sale-btn-knet').on('click',(e)=>{
+                payment_type = 'knet';
+                $('#sale-btn-cash').removeClass('active');
+                $('#sale-btn-knet').addClass('active');
+            })
+            $('#sale-btn-pickup').on('click',(e)=>{
+                sale_type = 'pickup';
+                $('#sale-btn-pickup').addClass('active');
+                $('#sale-btn-delivery').removeClass('active');
+                $('#sale-delivery-notes').addClass('hidden');
+            })
+            $('#sale-btn-delivery').on('click',(e)=>{
+                sale_type = 'delivery';
+                $('#sale-btn-pickup').removeClass('active');
+                $('#sale-btn-delivery').addClass('active');
+                $('#sale-delivery-notes').removeClass('hidden');
+            })
             $('.add-item-to-cart-btn').on('click', (element) => {
                 let product = atob($(element.currentTarget).attr('data'));
                 product = JSON.parse(product);
@@ -239,15 +308,21 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     data: {
-                        items: cart_items,
+                        line_items: cart_items,
                         discount: discount,
                         order_for: order_for,
+                        order_type:sale_type,
+                        total:100,
+                        discount:0,
+                        discount_amount:0,
+                        final_total:100,
+                        pay_type:payment_type,
+                        delivery_address:'',
                     },
-                    success: () => {
-
+                    success: (res) => {
+                        printReceipt(res);
                     }
                 });
-                printReceipt("<h2>Hello World</h2>");
             });
         });
 

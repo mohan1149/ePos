@@ -45,6 +45,24 @@ class OrderController extends Controller
         }
     }
 
+    public function show($id){
+        try {
+            if (auth()->user()->role == 1) {
+                $order = Order::where('created_for', auth()->user()->id)
+                ->where('id',$id)
+                ->first();
+                return view('sales.show',['order'=>$order]);
+            }else{
+                $order = Order::where('created_for', auth()->user()->created_for)
+                ->where('id',$id)
+                ->first();
+                return view('sales.show',['order'=>$order]);  
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function orderForPushNotification($id)
     {
         try {
@@ -378,12 +396,43 @@ class OrderController extends Controller
     public function placeOrderFromPOS(Request $request)
     {
         try {
-            return response()->json("fef", 200);
+            DB::beginTransaction();
+            $order = new Order();
+            $order->tsid = time();
+            $order->order_for = $request['order_for'];
+            $order->branch = auth()->user()->branch;
+            $order->staff = auth()->user()->id;
+            $order->order_items = json_encode($request['line_items']);
+            $order->created_for = auth()->user()->created_by;
+            $order->total = $request['total'];
+            $order->discount = $request['discount'];
+            $order->discount_amount = $request['discount_amount'];
+            $order->final_total = $request['final_total'];
+            $order->pay_type = $request['pay_type'];
+            $order->order_type = $request['order_type'];
+            $order->delivery_address = $request['delivery_address'];
+            $order->save();
+            $order_items = $request['line_items'];
+                foreach ($order_items as $item) {
+                    if($item['stock_item'] == 1){
+                        DB::table('products')->where('id',$item['id'])->update([
+                            'stock' => $item['stock'] - $item['quantity'],
+                        ]);
+                    }
+                }
+                $response = [
+                    'status' => true,
+                    'order'=>$order,
+                ];
+                DB::commit();
+            return view('sales.thermal',['request'=>$request])->render();
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'code' => 500,
                 'status' => false,
-                'msg' => $e->getMessage()
+                'msg' => $e->getMessage(),
+                'line'=>$e->getLine(),
             ], 200);
         }
     }

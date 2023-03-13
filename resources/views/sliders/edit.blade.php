@@ -63,7 +63,6 @@
 @section('js')
     <script>
         $(document).ready(function() {
-
             $(".slider_branch").on('change', () => {
                 let bid = $(".slider_branch").val();
                 let url = '/api/categories-and-brands-by-branch/' + bid;

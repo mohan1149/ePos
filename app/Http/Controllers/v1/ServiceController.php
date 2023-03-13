@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Branch;
 use App\Models\Category;
+use App\Models\ServiceOrder;
 
 
 
@@ -158,4 +159,30 @@ class ServiceController extends Controller
         }
     }
     
+    public function addServiceOrder(Request $request){
+        try {
+            $prevInv = ServiceOrder::where('oid', $request['oid'])->max('invoice_id');
+            $serviceOrder = new ServiceOrder();
+            $serviceOrder->oid = $request['oid'];
+            $serviceOrder->invoice_id =  $prevInv + 1;
+            $serviceOrder->created_by = $request['created_by'];
+            $serviceOrder->service_staff = $request['selected_staff'];
+            $serviceOrder->customer_name = $request['name'];
+            $serviceOrder->service_category = $request['selected_category'];
+            $serviceOrder->services = json_encode($request['selected_types']);
+            $serviceOrder->payment_type = $request['payType'];
+            $serviceOrder->notes = $request['notes'];
+            $serviceOrder->total_amount = $request['total_amount'];
+            $serviceOrder->save();
+            return response()->json([
+                'status'=>true,
+                'data'=>$serviceOrder,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'=>false,
+                'message'=>$e->getMessage(),
+            ], 200);
+        }
+    }
 }

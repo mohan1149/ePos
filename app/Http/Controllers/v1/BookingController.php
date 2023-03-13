@@ -31,14 +31,16 @@ class BookingController extends Controller
             $booking->name = $request['name'];
             $booking->phone = $request['phone'];
             $booking->number_of_people = $request['noOfPeople'];
-            $booking->booking_datetime = date('Y-m-d H:i:s',strtotime($request['selected_dateTime']));
+            $booking->booking_date = date('Y-m-d',strtotime($request['selected_dateTime']));
             $booking->staff = $request['selected_staff'];
             $booking->category = $request['selected_category'];
-            $booking->services = $request['selected_types'];
+            $booking->services = json_encode($request['selected_types']);
+            $booking->notes = $request['notes'];
+            $booking->booking_time = $request['selectedTime'];
             $booking->save();
             return true;
         } catch (\Exception $e) {
-            return false;
+            return $e->message();
         }
     }
 

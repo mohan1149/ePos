@@ -694,6 +694,7 @@ class APIController extends Controller
             $status = $this->bookingController->store($request);
             $response = [
                 'status' => $status,
+                
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {

@@ -48,6 +48,7 @@ Route::post('/update/service','App\Http\Controllers\v1\APIController@updateServi
 Route::post('/delete/service','App\Http\Controllers\v1\APIController@deleteService');
 Route::post('/services/category','App\Http\Controllers\v1\APIController@getServicesByCategory');
 
+Route::post('/service/add','App\Http\Controllers\v1\ServiceController@addServiceOrder');
 
 Route::post('/add/staff','App\Http\Controllers\v1\APIController@addStaff');
 Route::post('/all/staff','App\Http\Controllers\v1\APIController@allStaff');

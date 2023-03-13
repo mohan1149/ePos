@@ -31,6 +31,12 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
+                                    <label for="category">{{ __('t.category') }}</label>
+                                    {{ Form::select('category', [], null, ['class' => 'form-control product_category', 'required']) }}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
                                     {{ Form::label('featured', __('t.featured')) }}
                                     {{ Form::checkbox('published', null, true) }}
                                 </div>

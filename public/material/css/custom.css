@@ -28,3 +28,10 @@
 .justify-centent-space-between{
     justify-content: space-between;
 }
+.sale-modal-img{
+    width: 75px;
+    height: 75px;
+}
+.hidden{
+    display: hidden;
+}
