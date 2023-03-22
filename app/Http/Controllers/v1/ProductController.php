@@ -143,6 +143,7 @@ class ProductController extends Controller
 
     public function barcodes(){
         try {
+
             $products = Product::all();
             //return view('products.barcodes',['products'=>$products])->render();
             $content = view('products.barcodes',['products'=>$products])->render();
@@ -163,6 +164,7 @@ class ProductController extends Controller
                 $mpdf->WriteHTML($content);
                 $mpdf->Output();
         } catch (\Exception $e) {
+            return $e->getMessage();
             return false;
         }
     }

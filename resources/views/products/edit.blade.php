@@ -19,7 +19,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="product_sku">{{ __('t.sku') }}</label>
-                                    {{ Form::text('product_sku', $product->sku, ['class' => 'form-control', 'required']) }}
+                                    {{ Form::number('product_sku', $product->sku, ['class' => 'form-control', 'required']) }}
                                 </div>
                             </div>
                             <div class="col-md-4">

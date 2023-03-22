@@ -8,7 +8,7 @@
                     <p class="card-category">{{ __('t.all_are_mandatory') }}</p>
                 </div>
                 <div class="card-body">
-                        {!! Form::open(['url'=>'employees','methos'=>'POST','files'=>true]) !!}
+                        {!! Form::open(['url'=>'users','methos'=>'POST','files'=>true]) !!}
                         <div class="row p-2">
                             <div class="col-12">
                                 <div class="form-group">
