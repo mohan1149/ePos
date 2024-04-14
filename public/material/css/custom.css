@@ -35,3 +35,10 @@
 .hidden{
     display: hidden;
 }
+.sidebar .nav li a{
+    font-weight: bold;
+}
+.dataTables_wrapper .dataTables_filter input{
+    border-radius: 20px !important;
+    padding-left: 15px !important;
+}

@@ -1,4 +1,4 @@
-<div class="sidebar" data-color="orange" data-background-color="white"
+<div class="sidebar" data-color="danger" data-background-color="white"
     data-image="{{ asset('material') }}/img/sidebar-1.jpg">
     <div class="logo">
         <a href="/home" class="simple-text logo-normal">
