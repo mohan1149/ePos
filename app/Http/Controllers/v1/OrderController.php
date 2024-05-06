@@ -22,16 +22,18 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         try {
-
             if (auth()->user()->role == 1) {
                 $branches = Branch::where('created_by', auth()->user()->id)->get()->pluck('branch', 'id')->prepend(__("t.all"), 0);
                 $users = User::where('created_by', auth()->user()->id)->get()->pluck('name', 'id')->prepend(__('t.all'), 0);
                 $sales = Order::where('orders.created_for', auth()->user()->id)
                     ->join('branches', 'branches.id', '=', 'orders.branch')
                     ->join('users', 'users.id', '=', 'orders.staff')
-                    ->whereMonth('orders.created_at', isset($request['month']) ? $request['month'] : date('m'))
+                    // ->whereMonth('orders.created_at', isset($request['month']) ? $request['month'] : date('m'))
                     ->when(($request['branch'] !== '0' && isset($request['branch'])), function ($query) use ($request) {
                         $query->where('orders.branch', $request['branch']);
+                    })
+                    ->when(($request['month'] !== '0' && isset($request['month'])), function ($query) use ($request) {
+                        $query->whereMonth('orders.created_at', $request['month']);
                     })
                     ->when(($request['staff'] !== '0' && isset($request['staff'])), function ($query) use ($request) {
                         $query->where('orders.staff', $request['staff']);

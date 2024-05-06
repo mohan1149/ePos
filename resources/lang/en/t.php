@@ -125,4 +125,6 @@ return [
     'list_orders'=>'Online Orders',
     'update_status'=>"Update Delivery Status",
     'update_paymemt'=>"Update Payment Status",
+    'apply'=>"Apply",
+    "order_type"=>'Order Type',
 ];

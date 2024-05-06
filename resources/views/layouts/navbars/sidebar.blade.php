@@ -94,7 +94,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item {{ Request::segment(1) == 'sliders' ? ' active' : '' }}">
+                {{-- <li class="nav-item {{ Request::segment(1) == 'sliders' ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#sliders" aria-expanded="true">
                         <i class="material-icons">images</i>
                         <p>{{ __('t.sliders') }}
@@ -117,7 +117,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
                 <li class="nav-item {{  in_array(Request::segment(1),['products','tags','categories','brands','promotions'])  ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="true">
                         <i class="material-icons">shopping_cart</i>
@@ -151,19 +151,19 @@
                                     <span class="sidebar-normal"> {{ __('t.brands') }} </span>
                                 </a>
                             </li>
-                            <li class="nav-item{{ Request::segment(1) == 'promotions' ? ' active' : '' }}">
+                            {{-- <li class="nav-item{{ Request::segment(1) == 'promotions' ? ' active' : '' }}">
                                 <a class="nav-link" href="/promotions">
                                     <i class="material-icons">rocket_launch</i>
                                     <span class="sidebar-normal"> {{ __('t.promotions') }} </span>
                                 </a>
-                            </li>
+                            </li> --}}
                             
                             
                         </ul>
                     </div>
                 </li>
 
-                <li class="nav-item {{ Request::segment(1) == 'services' ? ' active' : '' }}">
+                {{-- <li class="nav-item {{ Request::segment(1) == 'services' ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#services" aria-expanded="true">
                         <i class="material-icons">favorite</i>
                         <p>{{ __('t.services') }}
@@ -187,9 +187,9 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
-                <li class="nav-item {{ Request::segment(1) == 'orders' ? ' active' : '' }}">
+                {{-- <li class="nav-item {{ Request::segment(1) == 'orders' ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#orders" aria-expanded="true">
                         <i class="material-icons">shopping_bag</i>
                         <p>{{ __('t.orders') }}
@@ -218,10 +218,10 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
                 
-                <li class="nav-item {{ Request::segment(1) == 'business' ? ' active' : '' }}">
+                {{-- <li class="nav-item {{ Request::segment(1) == 'business' ? ' active' : '' }}">
                     <a class="nav-link" data-toggle="collapse" href="#business" aria-expanded="true">
                         <i class="material-icons">business_center</i>
                         <p>{{ __('t.business') }}
@@ -251,19 +251,19 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
                 <li class="nav-item{{ Request::segment(1) == 'sales' ? ' active' : '' }}">
                     <a class="nav-link" href="/sales">
                         <i class="material-icons">payments</i>
                         <p>{{ __('t.sales') }}</p>
                     </a>
                 </li>
-                <li class="nav-item{{ Request::segment(1) == 'settings' ? ' active' : '' }}">
+                {{-- <li class="nav-item{{ Request::segment(1) == 'settings' ? ' active' : '' }}">
                     <a class="nav-link" href="/settings">
                         <i class="material-icons">settings_suggest</i>
                         <p>{{ __('t.settings') }}</p>
                     </a>
-                </li>
+                </li> --}}
             @endif
         </ul>
     </div>
