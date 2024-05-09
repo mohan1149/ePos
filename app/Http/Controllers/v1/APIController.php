@@ -1128,6 +1128,7 @@ class APIController extends Controller
             $order->order_type = $request['order_type'];
             $order->delivery_address = $request['delivery_address'];
             $order->delivery_charge = $request['delivery_charge'];
+            $order->shift = $request['shift'];
             $order->save();
             $order_items = json_decode($request['order_items']);
             foreach ($order_items as $item) {
