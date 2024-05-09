@@ -107,6 +107,10 @@ Route::post('/business-orders/monthly','App\Http\Controllers\v1\APIController@mo
 Route::post('/business-orders/monthly-by-client','App\Http\Controllers\v1\APIController@monthlySalesByClient');
 Route::get('/business-orders/download/{id}','App\Http\Controllers\v1\APIController@businessOrderInvoice');
 
+Route::post('/open/shift','App\Http\Controllers\v1\OrderController@openShift');
+
+Route::post('/close/shift','App\Http\Controllers\v1\OrderController@closeShift');
+
   //
 
 
