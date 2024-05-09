@@ -505,5 +505,30 @@ class OrderController extends Controller
             ], 200);
         }
     }
+    public function closeShift(Request $request){
+        try {
+            $shift_id = $request['shift_id'];
+            $end_time = $request['end_time'];
+            $shift = DB::table('shifts')
+            ->where('id',$shift_id)
+            ->update([
+                'status'=> 'close',
+                'end_time'=>$end_time,
+            ]); 
+            return response()->json([
+                'code' => 200,
+                'status' => true,
+                'msg'=>'shift closed',
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'status' => false,
+                'msg' => $e->getMessage(),
+                'line'=>$e->getLine(),
+            ], 200);
+        }
+    }
 
 }
