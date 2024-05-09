@@ -479,4 +479,31 @@ class OrderController extends Controller
     }
     //end
 
+
+    public function openShift(Request $request){
+        try {
+            $user_id = $request['user_id'];
+            $status = $request['status'];
+            $start_time = $request['start_time'];
+            $shift = DB::table('shifts')->insertGetId([
+                'user_id'=> $user_id,
+                'status'=> $status,
+                'start_time'=>$start_time,
+            ]); 
+            return response()->json([
+                'code' => 200,
+                'status' => true,
+                'shift'=>$shift,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'status' => false,
+                'msg' => $e->getMessage(),
+                'line'=>$e->getLine(),
+            ], 200);
+        }
+    }
+
 }
