@@ -110,6 +110,8 @@ Route::get('/business-orders/download/{id}','App\Http\Controllers\v1\APIControll
 Route::post('/open/shift','App\Http\Controllers\v1\OrderController@openShift');
 
 Route::post('/close/shift','App\Http\Controllers\v1\OrderController@closeShift');
+Route::get('/shift/reports/{shift_id}','App\Http\Controllers\v1\OrderController@shiftReports');
+
 
   //
 

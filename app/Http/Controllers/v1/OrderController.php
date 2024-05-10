@@ -530,5 +530,40 @@ class OrderController extends Controller
             ], 200);
         }
     }
+    public function shiftReports(Request $request){
+        try {
+            $shift_id = $request['shift_id'];
+            $pay_types = DB::table('orders')
+            ->select(DB::raw('COUNT(id) as count,sum(final_total) as total'), 'pay_type')
+            ->where('shift', $shift_id)
+            ->groupBy('pay_type')
+            ->get();
+            $order_types = DB::table('orders')
+            ->select(DB::raw('COUNT(id) as count,sum(final_total) as total'), 'order_type')
+            ->where('shift', $shift_id)
+            ->groupBy('order_type')
+            ->get();
+            $total = DB::table('orders')->where('shift', $shift_id)->count('id');
+            $shift_details =  DB::table('shifts')->where('id', $shift_id)->first();
+            return response()->json([
+                'code' => 200,
+                'status' => true,
+                'reports'=>[
+                    'pay_types'=>$pay_types,
+                    'order_types'=>$order_types,
+                    'total_orders'=> $total,
+                    'shift_details'=> $shift_details,
+                ],
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'status' => false,
+                'msg' => $e->getMessage(),
+                'line'=>$e->getLine(),
+            ], 200);
+        }
+    }
 
 }
